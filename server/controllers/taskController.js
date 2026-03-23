@@ -30,7 +30,7 @@ export const updateTask = async (req, res) => {
 
     try {
         const updatedTask = await pool.query('UPDATE tasks SET title = $1, status = $2 WHERE id = $3 AND user_id = $4 RETURNING *', [title, status, id, req.user.id]);
-        res.json(updateTask.rows[0]);
+        res.json(updatedTask.rows[0]);
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Server error' });
