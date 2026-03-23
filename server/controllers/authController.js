@@ -2,10 +2,15 @@ import bcrypt from 'bcrypt';
 import pool from '../config/db.js';
 import jwt from 'jsonwebtoken';
 
-export const register = async (req, res) => {
-    const { email, password } = req.body;
-
+export const register = async (req, res, next) => {
     try {
+        const { email, password } = req.body;
+        if (!email) {
+            return new Error('Email is required');
+        }
+        if (!password) {
+            return new Error('Password is required');
+        }
         // Check user exists
         const userExists = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
@@ -22,15 +27,19 @@ export const register = async (req, res) => {
 
         res.status(201).json(newUser.rows[0]);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'Server error'});
+        next(error);
     }
 }
 
-export const login = async (req, res) => {
-    const { email, password } = req.body;
-
+export const login = async (req, res, next) => {
     try {
+        const { email, password } = req.body;
+        if (!email) {
+            return new Error('Email is required');
+        }
+        if (!password) {
+            return new Error('Password is required');
+        }
         // Check user exists 
         const userExists = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         if (userExists.rows.length === 0) {
@@ -52,7 +61,6 @@ export const login = async (req, res) => {
             return res.status(400).json({ message: 'Incorrect password' });
         }
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 }
