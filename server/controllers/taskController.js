@@ -15,6 +15,7 @@ export const createTask = async (req, res, next) => {
     try {
         const { title } = req.body;
         if (!title) {
+            res.status(400);
             return new Error('Title is required');
         }
         const newTask = await pool.query('INSERT INTO tasks (user_id, title) VALUES ($1, $2) RETURNING *', [req.user.id, title]);
@@ -30,6 +31,7 @@ export const updateTask = async (req, res, next) => {
     try {
         const { title, status } = req.body;
         if (!title || !status) {
+            res.status(400);
             return new Error('Title and status is required');
         }
         const updatedTask = await pool.query('UPDATE tasks SET title = $1, status = $2 WHERE id = $3 AND user_id = $4 RETURNING *', [title, status, id, req.user.id]);

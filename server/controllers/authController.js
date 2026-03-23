@@ -5,11 +5,9 @@ import jwt from 'jsonwebtoken';
 export const register = async (req, res, next) => {
     try {
         const { email, password } = req.body;
-        if (!email) {
-            return new Error('Email is required');
-        }
-        if (!password) {
-            return new Error('Password is required');
+        if (!email || !password) {
+            res.status(400);
+            throw new Error('Email and password required');
         }
         // Check user exists
         const userExists = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
@@ -34,11 +32,9 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
-        if (!email) {
-            return new Error('Email is required');
-        }
-        if (!password) {
-            return new Error('Password is required');
+        if (!email || !password) {
+            res.status(400);
+            throw new Error('Email and password required');
         }
         // Check user exists 
         const userExists = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
