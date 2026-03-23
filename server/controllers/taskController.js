@@ -13,12 +13,12 @@ export const getTasks = async (req, res, next) => {
 // Create task
 export const createTask = async (req, res, next) => {
     try {
-        const { title } = req.body;
+        const { title, due_date } = req.body;
         if (!title) {
             res.status(400);
             return new Error('Title is required');
         }
-        const newTask = await pool.query('INSERT INTO tasks (user_id, title) VALUES ($1, $2) RETURNING *', [req.user.id, title]);
+        const newTask = await pool.query('INSERT INTO tasks (user_id, title, due_date) VALUES ($1, $2, $3) RETURNING *', [req.user.id, title, due_date]);
         res.status(201).json(newTask.rows[0]);
     } catch (error) {
         next(error); 
@@ -27,19 +27,20 @@ export const createTask = async (req, res, next) => {
 
 // Update task
 export const updateTask = async (req, res, next) => {
+  try {
     const { id } = req.params;
-    try {
-        const { title, status } = req.body;
-        if (!title || !status) {
-            res.status(400);
-            return new Error('Title and status is required');
-        }
-        const updatedTask = await pool.query('UPDATE tasks SET title = $1, status = $2 WHERE id = $3 AND user_id = $4 RETURNING *', [title, status, id, req.user.id]);
-        res.json(updatedTask.rows[0]);
-    } catch (error) {
-        next(error);
-    }
-}
+    const { title, completed, due_date } = req.body;
+
+    const result = await pool.query(`UPDATE tasks SET title = $1, completed = $2, due_date = $3 WHERE id = $4 AND user_id = $5 RETURNING *`,
+      [title, completed, due_date, id, req.user.id]
+    );
+
+    res.json(result.rows[0]);
+
+  } catch (err) {
+    next(err);
+  }
+};
 
 // Delete task
 export const deleteTask = async (req, res, next) => {
