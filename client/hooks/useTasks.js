@@ -1,13 +1,14 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useTasks as useTasksContext } from '../context/TaskContext';
 import tasksApi from '../api/tasksApi.js';
 
 const useTasks = () => {
     const { state, dispatch } = useTasksContext();
 
-    const fetchTasks = async () => {
+    const fetchTasks = async (workspaceId) => {
+        if (!workspaceId) return;
         try {
-            const response = await tasksApi.getTasks();
+            const response = await tasksApi.getTasks(workspaceId);
             dispatch({ type: 'SET_TASKS', payload: response.data });
         } catch (error) {
             console.error('Error fetching tasks', error);
@@ -28,24 +29,43 @@ const useTasks = () => {
             const response = await tasksApi.updateTask(id, task);
             dispatch({ type: 'UPDATE_TASK', payload: response.data });
         } catch (error) {
-            console.error('Error updating task, error');
+            console.error('Error updating task', error);
         }
     };
 
     const deleteTask = async (id) => {
         try {
-            const response = await tasksApi.deleteTask(id);
+            await tasksApi.deleteTask(id);
             dispatch({ type: 'DELETE_TASK', payload: id });
         } catch (error) {
-            console.error('Error deleting task, error');
+            console.error('Error deleting task', error);
         }
     };
 
-    useEffect(() => {
-        fetchTasks();
-    }, []);
+    const fetchWorkspaces = async () => {
+        try {
+            const response = await tasksApi.getWorkspaces();
+            dispatch({ type: 'SET_WORKSPACES', payload: response })
+        } catch (error) {
+            console.error('Error getting workspaces', error)
+        }
+    };
 
-    return { tasks: state.tasks, createTasks, updateTask, deleteTask };
+    const createWorkspace = async (name) => {
+        try {
+            const response = await tasksApi.createWorkspace(name);
+            dispatch({ type: 'ADD_WORKSPACE', payload: response});
+        } catch (error) {
+            console.error('Error creating workspace', error);
+        }
+    };
+
+    const setCurrentWorkspace = (workspace) => {
+        dispatch({ type: 'SET_CURRENT_WORKSPACE', payload: workspace })
+        fetchTasks(workspace.id);
+    }
+
+    return { tasks: state.tasks, workspaces: state.workspaces, currentWorkspace: state.currentWorkspace, user: state.user, token: state.token, createTasks, updateTask, deleteTask, fetchWorkspaces, createWorkspace, setCurrentWorkspace, dispatch, };
 };
 
 export default useTasks;
