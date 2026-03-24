@@ -3,7 +3,8 @@ import pool from "../config/db.js";
 // Get tasks (for logged in user)
 export const getTasks = async (req, res, next) => {
     try {
-        const tasks = await pool.query('SELECT * FROM tasks WHERE user_id = $1', [req.user.id]);
+        const { workspaceId } = req.query;
+        const tasks = await pool.query('SELECT * FROM tasks WHERE user_id = $1 AND workspace_id = $2', [req.user.id, workspaceId]);
         res.json(tasks.rows);
     } catch (error) {
         next(error); // pass to middleware
@@ -13,12 +14,12 @@ export const getTasks = async (req, res, next) => {
 // Create task
 export const createTask = async (req, res, next) => {
     try {
-        const { title, due_date } = req.body;
+        const { title, due_date, workspace_id } = req.body;
         if (!title) {
             res.status(400);
             return new Error('Title is required');
         }
-        const newTask = await pool.query('INSERT INTO tasks (user_id, title, due_date) VALUES ($1, $2, $3) RETURNING *', [req.user.id, title, due_date]);
+        const newTask = await pool.query('INSERT INTO tasks (user_id, title, due_date, workspace_id) VALUES ($1, $2, $3, $4) RETURNING *', [req.user.id, title, due_date, workspace_id]);
         res.status(201).json(newTask.rows[0]);
     } catch (error) {
         next(error); 

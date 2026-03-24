@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 
 import authRoutes from './routes/authRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
+import workspaceRoutes from './routes/workspaceRoutes.js';
 
 import { errorHandler } from './middleware/errorMiddleware.js';
 
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
+app.use('/api/workspaces', workspaceRoutes);
 
 // Error handler initialisation
 app.use(errorHandler);
