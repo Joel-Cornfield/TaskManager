@@ -1,8 +1,30 @@
 import { useTasks as useTasksContext } from '../context/TaskContext';
-import { getTasks, createTask, updateTask, deleteTask, getWorkspaces, createWorkspace } from '../api/tasksApi.js';
+import { getTasks, createTask, updateTask, deleteTask, getWorkspaces, createWorkspace, login as apiLogin, register as apiRegister, getUser} from '../api/tasksApi.js';
 
 const useTasks = () => {
     const { state, dispatch } = useTasksContext();
+
+    const login = async (email, password) => {
+        const { token, user } = await apiLogin(email, password);
+        dispatch({ type: 'SET_TOKEN', payload: token });
+        dispatch({ type: 'SET_USER', payload: user});
+        return { token, user };
+    };
+
+    const register = async (email, password) => {
+        const data = await apiRegister(email, password);
+        return data;
+    };
+
+    const restoreSession = async () => {
+        if (!state.token) return;
+        try {
+            const { user } = await getUser();
+            dispatch({ type: 'SET_USER', payload: user });
+        } catch (error) {
+            dispatch({ type: 'LOGOUT' });
+        }
+    };
 
     const fetchTasks = async (workspaceId) => {
         if (!workspaceId) return;
@@ -64,7 +86,7 @@ const useTasks = () => {
         fetchTasks(workspace.id);
     }
 
-    return { tasks: state.tasks, workspaces: state.workspaces, currentWorkspace: state.currentWorkspace, user: state.user, token: state.token, createTasks, updateTask, deleteTask, fetchWorkspaces, createWorkspace, setCurrentWorkspace, dispatch, };
+    return { tasks: state.tasks, workspaces: state.workspaces, currentWorkspace: state.currentWorkspace, user: state.user, token: state.token, createTasks, updateTask, deleteTask, fetchWorkspaces, createWorkspace, setCurrentWorkspace, dispatch, login, register, restoreSession };
 };
 
 export default useTasks;
