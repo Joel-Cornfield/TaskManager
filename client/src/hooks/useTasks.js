@@ -1,6 +1,5 @@
-import { useEffect } from "react";
 import { useTasks as useTasksContext } from '../context/TaskContext';
-import tasksApi from '../api/tasksApi.js';
+import { getTasks, createTask, updateTask, deleteTask, getWorkspaces, createWorkspace } from '../api/tasksApi.js';
 
 const useTasks = () => {
     const { state, dispatch } = useTasksContext();
@@ -8,8 +7,8 @@ const useTasks = () => {
     const fetchTasks = async (workspaceId) => {
         if (!workspaceId) return;
         try {
-            const response = await tasksApi.getTasks(workspaceId);
-            dispatch({ type: 'SET_TASKS', payload: response.data });
+            const response = await getTasks(workspaceId);
+            dispatch({ type: 'SET_TASKS', payload: response });
         } catch (error) {
             console.error('Error fetching tasks', error);
         }
@@ -17,8 +16,8 @@ const useTasks = () => {
 
     const createTasks = async (task) => {
         try {
-            const response = await tasksApi.createTask(task);
-            dispatch({ type: 'ADD_TASK', payload: response.data });
+            const response = await createTask(task);
+            dispatch({ type: 'ADD_TASK', payload: response });
         } catch (error) {
             console.error('Error creating task', error);
         }
@@ -26,8 +25,8 @@ const useTasks = () => {
 
     const updateTask = async (id, task) => {
         try {
-            const response = await tasksApi.updateTask(id, task);
-            dispatch({ type: 'UPDATE_TASK', payload: response.data });
+            const response = await updateTask(id, task);
+            dispatch({ type: 'UPDATE_TASK', payload: response });
         } catch (error) {
             console.error('Error updating task', error);
         }
@@ -35,7 +34,7 @@ const useTasks = () => {
 
     const deleteTask = async (id) => {
         try {
-            await tasksApi.deleteTask(id);
+            await deleteTask(id);
             dispatch({ type: 'DELETE_TASK', payload: id });
         } catch (error) {
             console.error('Error deleting task', error);
@@ -44,7 +43,7 @@ const useTasks = () => {
 
     const fetchWorkspaces = async () => {
         try {
-            const response = await tasksApi.getWorkspaces();
+            const response = await getWorkspaces();
             dispatch({ type: 'SET_WORKSPACES', payload: response })
         } catch (error) {
             console.error('Error getting workspaces', error)
@@ -53,7 +52,7 @@ const useTasks = () => {
 
     const createWorkspace = async (name) => {
         try {
-            const response = await tasksApi.createWorkspace(name);
+            const response = await createWorkspace(name);
             dispatch({ type: 'ADD_WORKSPACE', payload: response});
         } catch (error) {
             console.error('Error creating workspace', error);

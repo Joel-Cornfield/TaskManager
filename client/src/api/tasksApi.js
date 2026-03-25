@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://localhost:4000/api';
+const API_URL = 'http://localhost:4000/api';
 
 const getAuthHeader = () => {
     const token = localStorage.getItem('token');
@@ -41,7 +41,7 @@ export const updateTask = async (id, task) => {
 
 // Delete a task
 export const deleteTask = async (id) => {
-    await axios.delete(`${API_URL}/tasks/${id}`, getAuthHeader);
+    await axios.delete(`${API_URL}/tasks/${id}`, getAuthHeader());
 };
 
 // Get workspaces

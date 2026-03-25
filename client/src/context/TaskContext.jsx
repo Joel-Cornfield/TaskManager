@@ -5,7 +5,7 @@ const TaskContext = createContext();
 const initialState = {
     tasks: [],
     workspaces: [],
-    current_workspace: null,
+    currentWorkspace: null,
     user: null,
     token: localStorage.getItem('token') || null,
 };
@@ -33,7 +33,7 @@ const taskReducer = (state, action) => {
         case 'ADD_WORKSPACE':
             return { ...state, workspaces: [...state.workspaces, action.payload] };
         case 'SET_CURRENT_WORKSPACE':
-            return { ...state, current_workspace: action.payload };
+            return { ...state, currentWorkspace: action.payload };
         case 'SET_USER':
             return { ...state, user: action.payload };
         case 'SET_TOKEN':
@@ -41,7 +41,7 @@ const taskReducer = (state, action) => {
             return { ...state, token: action.payload };
         case 'LOGOUT':
             localStorage.removeItem('token');
-            return { ...state, token: null, user: null, workspaces: [], current_workspace: [], tasks: [] };
+            return { ...state, token: null, user: null, workspaces: [], currentWorkspace: null, tasks: [] };
         default:
             return state;
     }
@@ -58,7 +58,7 @@ export const TaskProvider = ({ children }) => {
     );
 };
 
-// Custom hook returning context value (allows components to access and update tasks)
+// Custom hook returning context value (allows components to access and update tasks + workspaces, etc)
 export const useTasks = () => {
     return useContext(TaskContext);
 }
