@@ -1,5 +1,5 @@
 import { useTasks as useTasksContext } from '../context/TaskContext';
-import { getTasks, createTask, updateTask, deleteTask, getWorkspaces, createWorkspace, login as apiLogin, register as apiRegister, getUser} from '../api/tasksApi.js';
+import { getTasks, createTask as apiCreateTask, updateTask as apiUpdateTask, deleteTask as apiDeleteTask, getWorkspaces, createWorkspace as apiCreateWorkspace, login as apiLogin, register as apiRegister, getUser} from '../api/tasksApi.js';
 
 const useTasks = () => {
     const { state, dispatch } = useTasksContext();
@@ -16,16 +16,6 @@ const useTasks = () => {
         return data;
     };
 
-    const restoreSession = async () => {
-        if (!state.token) return;
-        try {
-            const { user } = await getUser();
-            dispatch({ type: 'SET_USER', payload: user });
-        } catch (error) {
-            dispatch({ type: 'LOGOUT' });
-        }
-    };
-
     const fetchTasks = async (workspaceId) => {
         if (!workspaceId) return;
         try {
@@ -36,9 +26,9 @@ const useTasks = () => {
         }
     };
 
-    const createTasks = async (task) => {
+    const createTask = async (task) => {
         try {
-            const response = await createTask(task);
+            const response = await apiCreateTask(task);
             dispatch({ type: 'ADD_TASK', payload: response });
         } catch (error) {
             console.error('Error creating task', error);
@@ -47,7 +37,7 @@ const useTasks = () => {
 
     const updateTask = async (id, task) => {
         try {
-            const response = await updateTask(id, task);
+            const response = await apiUpdateTask(id, task);
             dispatch({ type: 'UPDATE_TASK', payload: response });
         } catch (error) {
             console.error('Error updating task', error);
@@ -56,7 +46,7 @@ const useTasks = () => {
 
     const deleteTask = async (id) => {
         try {
-            await deleteTask(id);
+            await apiDeleteTask(id);
             dispatch({ type: 'DELETE_TASK', payload: id });
         } catch (error) {
             console.error('Error deleting task', error);
@@ -74,7 +64,7 @@ const useTasks = () => {
 
     const createWorkspace = async (name) => {
         try {
-            const response = await createWorkspace(name);
+            const response = await apiCreateWorkspace(name);
             dispatch({ type: 'ADD_WORKSPACE', payload: response});
         } catch (error) {
             console.error('Error creating workspace', error);
@@ -86,7 +76,7 @@ const useTasks = () => {
         fetchTasks(workspace.id);
     }
 
-    return { tasks: state.tasks, workspaces: state.workspaces, currentWorkspace: state.currentWorkspace, user: state.user, token: state.token, createTasks, updateTask, deleteTask, fetchWorkspaces, createWorkspace, setCurrentWorkspace, dispatch, login, register, restoreSession };
+    return { tasks: state.tasks, workspaces: state.workspaces, currentWorkspace: state.currentWorkspace, user: state.user, token: state.token, createTask, updateTask, deleteTask, fetchWorkspaces, createWorkspace, setCurrentWorkspace, dispatch, login, register };
 };
 
 export default useTasks;

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
 
 const TaskContext = createContext();
 
@@ -49,6 +49,19 @@ const taskReducer = (state, action) => {
 
 export const TaskProvider = ({ children }) => {
     const [state, dispatch] = useReducer(taskReducer, initialState);
+
+    useEffect(() => {
+        const restoreSession = async () => {
+            if (!state.token) return;
+            try {
+                const user = await getUser();
+                dispatch({ type: 'SET_USER', payload: user });
+            } catch (error) {
+                dispatch({ type: 'LOGOUT' });
+            }
+        };
+        restoreSession();
+    }, []); // Empty array = runs once on mount
     
     // Provides state (current tasks) and dispatch (function to trigger actions) 
     return (
