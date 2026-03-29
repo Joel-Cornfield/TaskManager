@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useTasks from '../hooks/useTasks';
 
 const Register = () => {
@@ -25,6 +25,9 @@ const Register = () => {
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required/>
             <input type="text" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required/>
             <button type="submit">Register</button>
+            <p>
+                    Already have an account? <Link to="/login">Click here</Link>
+            </p>
         </form>
     );
 };
