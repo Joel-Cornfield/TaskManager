@@ -9,7 +9,7 @@ const WorkspaceForm = ({ onClose, workspace }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!name.trim()) return;
     try {
       if (workspace) {
         await updateWorkspace(workspace.id, name)
