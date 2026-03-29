@@ -17,7 +17,7 @@ const WorkspaceItem = ({ workspace }) => {
   }
   return (
         <div className="workspace-item">
-            <h3>{workspace.title}</h3>
+            <h3>{workspace.name}</h3>
             <Link to={`/workspace/${workspace.id}`}>Open</Link>
             <div className="workspace-card-actions">
                 {/* need to create a route for both */}
