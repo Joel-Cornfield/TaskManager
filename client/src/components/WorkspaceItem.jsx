@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import WorkspaceForm from './WorkspaceForm';
+import { Link } from 'react-router-dom';
 
 const WorkspaceItem = ({ workspace }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -15,12 +16,13 @@ const WorkspaceItem = ({ workspace }) => {
         );
   }
   return (
-        <div className="workspace-card">
+        <div className="workspace-item">
             <h3>{workspace.title}</h3>
+            <Link to={`/workspace/${workspace.id}`}>Open</Link>
             <div className="workspace-card-actions">
                 {/* need to create a route for both */}
                 <button onClick={() => setIsEditing(true)}>Edit</button> 
-                <button onClick={handleDelete}>Delete</button>
+                <button onClick={() => "hi"}>Delete</button>
             </div>
         </div>
     );
