@@ -54,8 +54,8 @@ export const TaskProvider = ({ children }) => {
         const restoreSession = async () => {
             if (!state.token) return;
             try {
-                const user = await getUser();
-                dispatch({ type: 'SET_USER', payload: user });
+                const response = await getUser();
+                dispatch({ type: 'SET_USER', payload: response.user });
             } catch (error) {
                 dispatch({ type: 'LOGOUT' });
             }
