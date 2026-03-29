@@ -8,15 +8,19 @@ const Board = () => {
   const { tasks, workspaces, currentWorkspace, setCurrentWorkspace, fetchWorkspaces } = useTasks();
 
   useEffect(() => {
-    fetchWorkspaces(); // Load workspaces on mount
-    if (id) {
-      const workspace = workspaces.find(w => w.id === parseInt(id));
-      if (workspace) setCurrentWorkspace(workspace);
-    } else if (workspaces.length > 0 && !currentWorkspace) {
-      setCurrentWorkspace(workspaces[0]);
-    }
-  }, [id, workspaces, currentWorkspace, setCurrentWorkspace, fetchWorkspaces]);
+    fetchWorkspaces();
+  }, [fetchWorkspaces]); // fetch on mount
 
+  useEffect(() => {
+      if (!workspaces.length) return;
+      if (id) {
+          const workspace = workspaces.find(w => w.id === parseInt(id));
+          if (workspace) setCurrentWorkspace(workspace);
+      } else if (!currentWorkspace) {
+          setCurrentWorkspace(workspaces[0]);
+      }
+  }, [id, workspaces]); // intentionally omit currentWorkspace and setCurrentWorkspace
+  
   if (!workspaces.length) {
     return <div className="board">You have not created a workspace yet...</div>;
   }

@@ -1,82 +1,121 @@
+import { useCallback } from 'react';
 import { useTasks as useTasksContext } from '../context/TaskContext';
-import { getTasks, createTask as apiCreateTask, updateTask as apiUpdateTask, deleteTask as apiDeleteTask, getWorkspaces, createWorkspace as apiCreateWorkspace, login as apiLogin, register as apiRegister, getUser} from '../api/tasksApi.js';
+import {
+    getTasks,
+    createTask as apiCreateTask,
+    updateTask as apiUpdateTask,
+    deleteTask as apiDeleteTask,
+    getWorkspaces,
+    createWorkspace as apiCreateWorkspace,
+    login as apiLogin,
+    register as apiRegister,
+    getUser,
+} from '../api/tasksApi.js';
 
+// Custom hook that wraps the raw context and API calls into clean, reusable functions.
+// Components import this instead of touching the context or API directly.
 const useTasks = () => {
     const { state, dispatch } = useTasksContext();
 
-    const login = async (email, password) => {
+    // useCallback keeps the function reference stable between renders.
+    // Without it, a new function is created every render, which can trigger
+    // infinite loops when these functions are used in useEffect dependency arrays.
+
+    const login = useCallback(async (email, password) => {
         const { token, user } = await apiLogin(email, password);
         dispatch({ type: 'SET_TOKEN', payload: token });
-        dispatch({ type: 'SET_USER', payload: user});
+        dispatch({ type: 'SET_USER', payload: user });
         return { token, user };
-    };
+    }, [dispatch]);
 
-    const register = async (email, password) => {
+    const register = useCallback(async (email, password) => {
+        // No state update needed here
         const data = await apiRegister(email, password);
         return data;
-    };
+    }, []);
 
-    const fetchTasks = async (workspaceId) => {
+    const fetchTasks = useCallback(async (workspaceId) => {
         if (!workspaceId) return;
         try {
             const response = await getTasks(workspaceId);
-            dispatch({ type: 'SET_TASKS', payload: response });
+            dispatch({ type: 'SET_TASKS', payload: response }); // Replace the tasks array in state
         } catch (error) {
             console.error('Error fetching tasks', error);
         }
-    };
+    }, [dispatch]);
 
-    const createTask = async (task) => {
+    const createTask = useCallback(async (task) => {
         try {
             const response = await apiCreateTask(task);
-            dispatch({ type: 'ADD_TASK', payload: response });
+            dispatch({ type: 'ADD_TASK', payload: response }); // Append it to the tasks array in state
         } catch (error) {
             console.error('Error creating task', error);
         }
-    };
+    }, [dispatch]);
 
-    const updateTask = async (id, task) => {
+    const updateTask = useCallback(async (id, task) => {
         try {
             const response = await apiUpdateTask(id, task);
-            dispatch({ type: 'UPDATE_TASK', payload: response });
+            dispatch({ type: 'UPDATE_TASK', payload: response }); // Replace it in the tasks array in state
         } catch (error) {
             console.error('Error updating task', error);
         }
-    };
+    }, [dispatch]);
 
-    const deleteTask = async (id) => {
+    const deleteTask = useCallback(async (id) => {
         try {
             await apiDeleteTask(id);
-            dispatch({ type: 'DELETE_TASK', payload: id });
+            dispatch({ type: 'DELETE_TASK', payload: id }); // Remove it from state
         } catch (error) {
             console.error('Error deleting task', error);
         }
-    };
+    }, [dispatch]);
 
-    const fetchWorkspaces = async () => {
+    const fetchWorkspaces = useCallback(async () => {
         try {
             const response = await getWorkspaces();
-            dispatch({ type: 'SET_WORKSPACES', payload: response })
+            dispatch({ type: 'SET_WORKSPACES', payload: response }); // Store them in state
         } catch (error) {
-            console.error('Error getting workspaces', error)
+            console.error('Error getting workspaces', error);
         }
-    };
+    }, [dispatch]);
 
-    const createWorkspace = async (name) => {
+    const createWorkspace = useCallback(async (name) => {
         try {
             const response = await apiCreateWorkspace(name);
-            dispatch({ type: 'ADD_WORKSPACE', payload: response});
+            dispatch({ type: 'ADD_WORKSPACE', payload: response }); // Appends it to the workspaces array in state
+            return response;
         } catch (error) {
             console.error('Error creating workspace', error);
         }
+    }, [dispatch]);
+
+    // Sets the active workspace in state and immediately fetches its tasks.
+    const setCurrentWorkspace = useCallback((workspace) => {
+        dispatch({ type: 'SET_CURRENT_WORKSPACE', payload: workspace });
+        if (workspace?.id) {
+            fetchTasks(workspace.id);
+        }
+    }, [dispatch, fetchTasks]);
+
+    // Expose state values and functions to any component that calls useTasks().
+    return {
+        tasks: state.tasks || [],
+        workspaces: state.workspaces || [],
+        currentWorkspace: state.currentWorkspace || null,
+        user: state.user,
+        token: state.token,
+        login,
+        register,
+        fetchTasks,
+        createTask,
+        updateTask,
+        deleteTask,
+        fetchWorkspaces,
+        createWorkspace,
+        setCurrentWorkspace,
+        dispatch,
     };
-
-    const setCurrentWorkspace = (workspace) => {
-        dispatch({ type: 'SET_CURRENT_WORKSPACE', payload: workspace })
-        fetchTasks(workspace.id);
-    }
-
-    return { tasks: state.tasks, workspaces: state.workspaces, currentWorkspace: state.currentWorkspace, user: state.user, token: state.token, createTask, updateTask, deleteTask, fetchWorkspaces, createWorkspace, setCurrentWorkspace, dispatch, login, register };
 };
 
 export default useTasks;
