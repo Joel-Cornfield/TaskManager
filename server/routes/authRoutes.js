@@ -6,6 +6,6 @@ const authRoutes = express.Router();
 
 authRoutes.post('/register', register);
 authRoutes.post('/login', login);
-authRoutes.post('/getUser', protect, getUser);
+authRoutes.get('/me', protect, getUser);
 
 export default authRoutes;

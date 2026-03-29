@@ -17,7 +17,7 @@ export const createTask = async (req, res, next) => {
         const { title, due_date, workspace_id } = req.body;
         if (!title) {
             res.status(400);
-            return new Error('Title is required');
+            throw new Error('Title is required');
         }
         const newTask = await pool.query('INSERT INTO tasks (user_id, title, due_date, workspace_id) VALUES ($1, $2, $3, $4) RETURNING *', [req.user.id, title, due_date, workspace_id]);
         res.status(201).json(newTask.rows[0]);
@@ -28,19 +28,16 @@ export const createTask = async (req, res, next) => {
 
 // Update task
 export const updateTask = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const { title, completed, due_date } = req.body;
-
-    const result = await pool.query(`UPDATE tasks SET title = $1, completed = $2, due_date = $3 WHERE id = $4 AND user_id = $5 RETURNING *`,
-      [title, completed, due_date, id, req.user.id]
-    );
-
-    res.json(result.rows[0]);
-
-  } catch (err) {
-    next(err);
-  }
+    try {
+        const { id } = req.params;
+        const { title, completed, due_date } = req.body;
+        const result = await pool.query(`UPDATE tasks SET title = $1, completed = $2, due_date = $3 WHERE id = $4 AND user_id = $5 RETURNING *`,
+          [title, completed, due_date, id, req.user.id]
+        );  
+        res.json(result.rows[0]);
+    } catch (err) {
+        next(err);
+    }
 };
 
 // Delete task

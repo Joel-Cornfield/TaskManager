@@ -22,7 +22,7 @@ export const register = async (email, password) => {
 };
 
 export const getUser = async () => {
-    const response = await axios.get(`${API_URL}/auth/getUser`, getAuthHeader());
+    const response = await axios.get(`${API_URL}/auth/me`, getAuthHeader());
     return response.data;
 }
 

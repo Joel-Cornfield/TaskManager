@@ -6,7 +6,7 @@ const workspaceRoutes = express.Router();
 
 workspaceRoutes.get('/', protect, getWorkspaces);
 workspaceRoutes.post('/', protect, createWorkspace);
-workspaceRoutes.put('/', protect, updateWorkspace);
-workspaceRoutes.delete('/', protect, deleteWorkspace);
+workspaceRoutes.put('/:id', protect, updateWorkspace);
+workspaceRoutes.delete('/:id', protect, deleteWorkspace);
 
 export default workspaceRoutes;

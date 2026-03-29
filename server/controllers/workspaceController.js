@@ -31,7 +31,7 @@ export const updateWorkspace = async (req, res, next) => {
             res.status(400);
             return newError('Name required');
         }
-        await pool.query('UPDATE workspaces SET name = $1 WHERE id = $2 AND user_id = $3 RETURNING *',[name, id, req.user.id]);
+        const result = await pool.query('UPDATE workspaces SET name = $1 WHERE id = $2 AND user_id = $3 RETURNING *',[name, id, req.user.id]);
         res.json(result.rows[0]);
     } catch (error) {
         next(error);

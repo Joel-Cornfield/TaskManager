@@ -64,7 +64,7 @@ export const getUser = async (req, res, next) => {
     try {
         const user = await pool.query('SELECT id, email FROM users WHERE id = $1', [req.user.id]);
         if (!user.rows.length) return res.status(404).json({ message: 'User not found' });
-        res.json({ user: userResult.rows[0] });
+        res.json({ user: user.rows[0] });
     } catch (error) {
         next(error);
     }
