@@ -1,20 +1,20 @@
 import React, { use, useState } from 'react'
 import useTasks from '../hooks/useTasks';
-import { createWorkspace } from '../api/tasksApi';
+import { createWorkspace, updateWorkspace } from '../api/tasksApi';
 
 const WorkspaceForm = ({ onClose, workspace }) => {
-  const [title, setTitle] = useState('');
+  const [name, setName] = useState(workspace?.name || '');
   const [error, setError] = useState('');
-  const { createWorkspace } = useTasks();
+  const { createWorkspace, updateWorkspace } = useTasks();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;
     try {
       if (workspace) {
-        // update workspace
+        await updateWorkspace(workspace.id, name)
       } else {
-        await createWorkspace(title);
+        await createWorkspace(name);
       }
       onClose();
     } catch (error) {
@@ -27,13 +27,13 @@ const WorkspaceForm = ({ onClose, workspace }) => {
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="title">Title</label>
+          <label htmlFor="name">Name</label>
           <input 
-            id="title" 
+            id="name" 
             type="text" 
-            value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
-            placeholder="Workspace title" 
+            value={name} 
+            onChange={(e) => setName(e.target.value)} 
+            placeholder="Workspace name" 
             required>
           </input>
         </div>

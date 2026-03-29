@@ -32,6 +32,18 @@ const taskReducer = (state, action) => {
             return { ...state, workspaces: action.payload };
         case 'ADD_WORKSPACE':
             return { ...state, workspaces: [...state.workspaces, action.payload] };
+        case 'UPDATE_WORKSPACE':
+            return { 
+                ...state,
+                workspaces: state.workspaces.map(workspace => 
+                    workspace.id === action.payload.id ? action.payload : workspace
+                ),
+            };
+        case 'DELETE_WORKSPACE': 
+            return { 
+                ...state, 
+                workspaces: state.workspaces.filter(workspace => workspace.id !== action.payload),
+            };
         case 'SET_CURRENT_WORKSPACE':
             return { ...state, currentWorkspace: action.payload };
         case 'SET_USER':

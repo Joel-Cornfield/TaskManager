@@ -9,6 +9,8 @@ import {
     createWorkspace as apiCreateWorkspace,
     login as apiLogin,
     register as apiRegister,
+    updateWorkspace as apiUpdateWorkspace,
+    deleteWorkspace as apiDeleteWorkspace,
     getUser,
 } from '../api/tasksApi.js';
 
@@ -90,6 +92,25 @@ const useTasks = () => {
         }
     }, [dispatch]);
 
+    const updateWorkspace = useCallback(async (id, name) => {
+        try {
+            const response = await apiUpdateWorkspace(id, name);
+            dispatch({ type: 'UPDATE_WORKSPACE', payload: response }); // Replace it in workspaces array in state 
+            return response;
+        } catch (error) {
+            console.error('Error updating workspace', error);
+        }
+    }, [dispatch]);
+
+    const deleteWorkspace = useCallback(async (id) => {
+        try {
+            await apiDeleteWorkspace(id);
+            dispatch({ type: 'DELETE_WORKSPACE', payload: id }); // Remove it from state
+        } catch (error) {
+            console.error('Error deleting workspace', error);
+        }
+    }, [dispatch]);
+
     // Sets the active workspace in state and immediately fetches its tasks.
     const setCurrentWorkspace = useCallback((workspace) => {
         dispatch({ type: 'SET_CURRENT_WORKSPACE', payload: workspace });
@@ -113,6 +134,8 @@ const useTasks = () => {
         deleteTask,
         fetchWorkspaces,
         createWorkspace,
+        updateWorkspace, 
+        deleteWorkspace,
         setCurrentWorkspace,
         dispatch,
     };

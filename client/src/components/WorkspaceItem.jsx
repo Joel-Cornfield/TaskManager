@@ -1,9 +1,17 @@
 import React, { useState } from 'react'
 import WorkspaceForm from './WorkspaceForm';
 import { Link } from 'react-router-dom';
+import useTasks from '../hooks/useTasks';
 
 const WorkspaceItem = ({ workspace }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const { deleteWorkspace } = useTasks();
+
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this workspace?')) {
+      deleteWorkspace(workspace.id);
+    }
+  };
 
   if (isEditing) {
         return (
@@ -20,12 +28,11 @@ const WorkspaceItem = ({ workspace }) => {
             <h3>{workspace.name}</h3>
             <Link to={`/workspace/${workspace.id}`}>Open</Link>
             <div className="workspace-card-actions">
-                {/* need to create a route for both */}
                 <button onClick={() => setIsEditing(true)}>Edit</button> 
-                <button onClick={() => "hi"}>Delete</button>
+                <button onClick={handleDelete}>Delete</button>
             </div>
         </div>
     );
 };
 
-export default WorkspaceItem
+export default WorkspaceItem;

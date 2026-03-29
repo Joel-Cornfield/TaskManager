@@ -60,3 +60,14 @@ export const createWorkspace = async (name) => {
     const response = await axios.post(`${API_URL}/workspaces`, { name }, getAuthHeader());
     return response.data;
 };
+
+// Update workspace
+export const updateWorkspace = async (id, name) => {
+    const response = await axios.put(`${API_URL}/workspaces/${id}`, { name }, getAuthHeader());
+    return response.data;
+};
+
+// Delete workspace
+export const deleteWorkspace = async (id) => {
+    await axios.delete(`${API_URL}/workspaces/${id}`, getAuthHeader());
+};
