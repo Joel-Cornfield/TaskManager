@@ -9,6 +9,8 @@ const initialState = {
     currentWorkspace: null,
     user: null,
     token: localStorage.getItem('token') || null,
+    loading: false,
+    loadingWorkspaces: false,
 };
 
 const taskReducer = (state, action) => {
@@ -55,6 +57,10 @@ const taskReducer = (state, action) => {
         case 'LOGOUT':
             localStorage.removeItem('token');
             return { ...state, token: null, user: null, workspaces: [], currentWorkspace: null, tasks: [] };
+        case 'SET_LOADING':
+            return { ...state, loading: action.payload };
+        case 'SET_LOADING_WORKSPACES': 
+            return { ...state, loadingWorkspaces: action.payload };
         default:
             return state;
     }

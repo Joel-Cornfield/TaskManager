@@ -38,11 +38,14 @@ const useTasks = () => {
 
     const fetchTasks = useCallback(async (workspaceId) => {
         if (!workspaceId) return;
+        dispatch({ type: 'SET_LOADING', payload: true });
         try {
             const response = await getTasks(workspaceId);
             dispatch({ type: 'SET_TASKS', payload: response }); // Replace the tasks array in state
         } catch (error) {
             console.error('Error fetching tasks', error);
+        } finally {
+            dispatch({ type: 'SET_LOADING', payload: false });
         }
     }, [dispatch]);
 
@@ -74,11 +77,14 @@ const useTasks = () => {
     }, [dispatch]);
 
     const fetchWorkspaces = useCallback(async () => {
+        dispatch({ type: 'SET_LOADING_WORKSPACES', payload: true });
         try {
             const response = await getWorkspaces();
             dispatch({ type: 'SET_WORKSPACES', payload: response }); // Store them in state
         } catch (error) {
             console.error('Error getting workspaces', error);
+        } finally {
+            dispatch({ type: 'SET_LOADING_WORKSPACES', payload: false });
         }
     }, [dispatch]);
 
@@ -126,6 +132,8 @@ const useTasks = () => {
         currentWorkspace: state.currentWorkspace || null,
         user: state.user,
         token: state.token,
+        loading: state.loading,
+        loadingWorkspaces: state.loadingWorkspaces,
         login,
         register,
         fetchTasks,
