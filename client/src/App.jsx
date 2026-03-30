@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import useTasks from './hooks/useTasks';
 import Workspaces from './pages/Workspaces';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
   return (
@@ -15,11 +16,14 @@ const App = () => {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Board />} />
-          <Route path="/workspaces" element={<Workspaces />} />
-          <Route path="/workspace/:id" element={<Board />} />
+          {/* Public Routes */}
           <Route path="/login" element={<Login />}/>
           <Route path="/register" element={<Register />}/>
+
+          {/* Protected Routes */}
+          <Route path="/" element={<ProtectedRoute><Board /></ProtectedRoute>} />
+          <Route path="/workspaces" element={<ProtectedRoute><Workspaces /></ProtectedRoute>} />
+          <Route path="/workspace/:id" element={<ProtectedRoute><Board /></ProtectedRoute>} />
         </Routes>
       </Router>
     </TaskProvider>

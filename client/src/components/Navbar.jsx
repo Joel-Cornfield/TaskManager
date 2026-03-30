@@ -44,51 +44,55 @@ const Navbar = () => {
             <nav className="navbar">
                 <div className="navbar-left" ref={navLeftRef}>
                     <Link to="/" className="navbar-title">Task Manager</Link>
-                    <div className="workspace-section">
-                        <button
-                            className="workspace-btn"
-                            onClick={() => {
-                                setShowWorkspaceDropdown(!showWorkspaceDropdown);
-                                setShowCreateMenu(false);
-                            }}
-                        >
-                            Workspaces
-                            <span className={`dropdown-arrow ${showWorkspaceDropdown ? 'open' : ''}`}>▼</span>
-                        </button>
-                        {showWorkspaceDropdown && (
-                            <div className="workspace-dropdown">
-                                <Link to="/workspaces" onClick={() => setShowWorkspaceDropdown(false)}>View all workspaces</Link>
-                                <hr />
-                                {workspaces?.map(workspace => (
-                                    <Link
-                                        key={workspace.id}
-                                        to={`/workspace/${workspace.id}`}
-                                        onClick={() => setShowWorkspaceDropdown(false)}
-                                    >
-                                        {workspace.name}
-                                    </Link>
-                                ))}
+                    {token && 
+                        <div className="navbar-center">
+                            <div className="workspace-section">
+                                <button
+                                    className="workspace-btn"
+                                    onClick={() => {
+                                        setShowWorkspaceDropdown(!showWorkspaceDropdown);
+                                        setShowCreateMenu(false);
+                                    }}
+                                >
+                                    Workspaces
+                                    <span className={`dropdown-arrow ${showWorkspaceDropdown ? 'open' : ''}`}>▼</span>
+                                </button>
+                                {showWorkspaceDropdown && (
+                                    <div className="workspace-dropdown">
+                                        <Link to="/workspaces" onClick={() => setShowWorkspaceDropdown(false)}>View all workspaces</Link>
+                                        <hr />
+                                        {workspaces?.map(workspace => (
+                                            <Link
+                                                key={workspace.id}
+                                                to={`/workspace/${workspace.id}`}
+                                                onClick={() => setShowWorkspaceDropdown(false)}
+                                            >
+                                                {workspace.name}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
-                    <div className="create-section">
-                        <button
-                            className='create-btn'
-                            onClick={() => {
-                                setShowCreateMenu(!showCreateMenu);
-                                setShowWorkspaceDropdown(false);
-                            }}
-                        >
-                            + Create
-                            <span className={`dropdown-arrow ${showCreateMenu ? 'open' : ''}`}>▼</span>
-                        </button>
-                        {showCreateMenu && (
-                            <div className="create-menu">
-                                <button onClick={() => { openModal('task'); setShowCreateMenu(false); }}>New Task</button>
-                                <button onClick={() => { openModal('workspace'); setShowCreateMenu(false); }}>New Workspace</button>
+                            <div className="create-section">
+                                <button
+                                    className='create-btn'
+                                    onClick={() => {
+                                        setShowCreateMenu(!showCreateMenu);
+                                        setShowWorkspaceDropdown(false);
+                                    }}
+                                >
+                                    + Create
+                                    <span className={`dropdown-arrow ${showCreateMenu ? 'open' : ''}`}>▼</span>
+                                </button>
+                                {showCreateMenu && (
+                                    <div className="create-menu">
+                                        <button onClick={() => { openModal('task'); setShowCreateMenu(false); }}>New Task</button>
+                                        <button onClick={() => { openModal('workspace'); setShowCreateMenu(false); }}>New Workspace</button>
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    }
                 </div>
                 <div className="navbar-right">
                     {token ? (
