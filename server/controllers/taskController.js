@@ -30,9 +30,23 @@ export const createTask = async (req, res, next) => {
 export const updateTask = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { title, completed, due_date } = req.body;
-        const result = await pool.query(`UPDATE tasks SET title = $1, completed = $2, due_date = $3 WHERE id = $4 AND user_id = $5 RETURNING *`,
-          [title, completed, due_date, id, req.user.id]
+        const { title, due_date, status } = req.body;
+        
+        // Fetch existing task so we can fall back to old values
+        const existing = await pool.query('SELECT * FROM tasks WHERE id = $1 AND user_id = $2', [id, req.user.id]);
+        if (!existing.rows.length) {
+            return res.status(404).json({ error: 'Task not found' });
+        }
+
+        const current = existing.rows[0];
+
+        // Use provided value if it exists, otherwise keep old value
+        const updatedTitle = title ?? current.title;
+        const updatedDueDate = due_date ?? current.due_date;
+        const updatedStatus = status ?? current.status;
+
+        const result = await pool.query(`UPDATE tasks SET title = $1, due_date = $2, status = $3 WHERE id = $4 AND user_id = $5 RETURNING *`,
+          [updatedTitle, updatedDueDate, updatedStatus, id, req.user.id]
         );  
         res.json(result.rows[0]);
     } catch (err) {
