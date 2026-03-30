@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
+import { getUser } from '../api/tasksApi';
 
 const TaskContext = createContext();
 
