@@ -1,4 +1,6 @@
-/* Global styles */
+/* ===========================================
+   GLOBAL STYLES
+   =========================================== */
 * {
   margin: 0;
   padding: 0;
@@ -11,13 +13,15 @@ body {
   color: #333;
 }
 
-/* Navbar styles */
+/* ===========================================
+   NAVBAR
+   =========================================== */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #0079bf;
+  background-color: #ffb766;
   color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -40,7 +44,8 @@ body {
   position: relative;
 }
 
-.workspace-btn, .create-btn {
+.workspace-btn,
+.create-btn {
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
   border: none;
@@ -54,7 +59,8 @@ body {
   transition: background-color 0.2s;
 }
 
-.workspace-btn:hover, .create-btn:hover {
+.workspace-btn:hover,
+.create-btn:hover {
   background-color: rgba(255, 255, 255, 0.3);
 }
 
@@ -67,7 +73,8 @@ body {
   transform: rotate(180deg);
 }
 
-.workspace-dropdown, .create-menu {
+.workspace-dropdown,
+.create-menu {
   position: absolute;
   top: 100%;
   left: 0;
@@ -80,7 +87,8 @@ body {
   margin-top: 0.5rem;
 }
 
-.workspace-dropdown a, .create-menu button {
+.workspace-dropdown a,
+.create-menu button {
   display: block;
   padding: 0.75rem 1rem;
   color: #333;
@@ -93,7 +101,8 @@ body {
   transition: background-color 0.2s;
 }
 
-.workspace-dropdown a:hover, .create-menu button:hover {
+.workspace-dropdown a:hover,
+.create-menu button:hover {
   background-color: #f0f0f0;
 }
 
@@ -108,7 +117,8 @@ body {
   gap: 1rem;
 }
 
-.login-btn, .logout-btn {
+.login-btn,
+.logout-btn {
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
   border: none;
@@ -120,11 +130,14 @@ body {
   transition: background-color 0.2s;
 }
 
-.login-btn:hover, .logout-btn:hover {
+.login-btn:hover,
+.logout-btn:hover {
   background-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Modal styles */
+/* ===========================================
+   MODAL
+   =========================================== */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -157,65 +170,282 @@ body {
   cursor: pointer;
 }
 
-/* Board styles */
+/* ===========================================
+   BOARD
+   The outer wrapper rendered by Board.jsx.
+   It holds the board title and the columns row.
+   =========================================== */
 .board {
-  padding: 2rem;
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
+  /* 
+    TRY: padding gives breathing room around the board.
+    Trello uses ~8px top and ~16px sides.
+    Example: padding: 1rem 1.5rem;
+  */
+  padding: 1rem 1.5rem;
+
+  /* 
+    TRY: A slightly darker or blurred background
+    helps the columns stand out.
+    You could set a background image or keep a flat colour.
+    Example: background-color: #1a73c4;
+             or a gradient: background: linear-gradient(135deg, #0079bf, #005a87);
+  */
+  background-image: url('../background.png');
+  background-size: cover;
+
+  /* 
+    Makes the board fill the remaining viewport height
+    below the navbar (adjust 60px to match your navbar height).
+  */
+  min-height: calc(100vh - 60px);
 }
 
-.column {
-  background-color: #ebecf0;
-  border-radius: 8px;
-  padding: 1rem;
-  min-width: 300px;
-  max-width: 300px;
-}
-
-.column h2 {
+/* Board title — the workspace name rendered as <h1> */
+.board h1 {
+  /* 
+    TRY: white text so it pops on the blue background.
+    Example: color: white; font-size: 1.25rem; font-weight: 700;
+    Add margin-bottom so the columns sit below it nicely.
+  */
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
   margin-bottom: 1rem;
 }
 
-.task-list {
+/* ===========================================
+   COLUMNS WRAPPER
+   The <div className="columns"> inside Board.jsx
+   that wraps all three Column components.
+   =========================================== */
+.columns {
+  /* 
+    Flexbox lines the columns up side by side.
+    Trello scrolls horizontally when there are many columns.
+    TRY: gap controls space between columns.
+    Example: gap: 0.75rem;
+  */
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  align-items: flex-start;
+  gap: 0.75rem;
+
+  /* Allows horizontal scrolling if columns overflow */
+  overflow-x: auto;
+  padding-bottom: 1rem; /* so the scrollbar doesn't clip cards */
 }
 
-.task-card {
-  background-color: white;
-  padding: 1rem;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+/* ===========================================
+   COLUMN
+   Each individual column (To Do, In-Progress, Completed).
+   =========================================== */
+.column {
+  /* 
+    Trello columns have a light grey background.
+    TRY: background-color: #ebecf0;
+    Keep a fixed width so they don't stretch or shrink.
+    Example: width: 272px; min-width: 272px;
+  */
+  background-color: #ebecf0;
+  border-radius: 8px;
+  padding: 0.75rem;
+  width: 272px;
+  min-width: 272px;
+
+  /* Lets the column grow downward as cards are added */
+  height: fit-content;
 }
 
-.task-card h3 {
+/* Column heading — "To Do", "In-Progress", "Completed" */
+.column h2 {
+  /* 
+    TRY: slightly smaller than your board title.
+    Trello uses ~14px semi-bold.
+    Example: font-size: 0.9rem; font-weight: 600; color: #172b4d;
+    Add margin-bottom so there's a gap before the first card.
+  */
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #172b4d;
   margin-bottom: 0.5rem;
 }
 
-.task-card button {
-  margin-right: 0.5rem;
-  padding: 0.25rem 0.5rem;
-  border: none;
+/* Empty state text inside a column */
+.column p {
+  /* 
+    TRY: muted colour so it's subtle.
+    Example: font-size: 0.85rem; color: #888;
+  */
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* ===========================================
+   TASK LIST
+   The <div className="task-list"> inside Column.jsx.
+   Stacks cards vertically.
+   =========================================== */
+.task-list {
+  display: flex;
+  flex-direction: column;
+
+  /* 
+    TRY: gap adds space between each card.
+    Example: gap: 0.5rem;
+  */
+  gap: 0.5rem;
+}
+
+/* ===========================================
+   TASK CARD
+   Each individual card rendered by TaskCard.jsx.
+   =========================================== */
+.task-card {
+  /* 
+    White background with a subtle shadow — classic Trello card look.
+    TRY: box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    Rounded corners and padding make it feel card-like.
+    Example: padding: 0.6rem 0.75rem; border-radius: 4px;
+  */
+  background-color: white;
   border-radius: 4px;
+  padding: 0.6rem 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+
+  /* 
+    TRY: a left border accent to indicate status or priority.
+    Example: border-left: 3px solid #0079bf;
+    You could conditionally apply different colours per status in JSX.
+  */
+  /* border-left: 3px solid #0079bf; */
+
+  /* Smooth lift on hover */
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
   cursor: pointer;
 }
 
-/* Form styles */
-.task-form, .workspace-form {
+.task-card:hover {
+  /* 
+    TRY: a stronger shadow and tiny upward lift on hover.
+    Example:
+      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+      transform: translateY(-2px);
+  */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+  transform: translateY(-2px);
+}
+
+/* Card title */
+.task-card h3 {
+  /* 
+    TRY: slightly smaller text, dark colour for readability.
+    Example: font-size: 0.9rem; color: #172b4d; font-weight: 500;
+    Keep margin-bottom small so the date sits close below.
+  */
+  font-size: 0.9rem;
+  color: #172b4d;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+/* Due date text */
+.task-card p {
+  /* 
+    TRY: small and muted — it's secondary information.
+    Example: font-size: 0.75rem; color: #888;
+    If overdue you could use color: #eb5a46; in JSX conditionally.
+  */
+  font-size: 0.75rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+}
+
+/* Wrapper for the Edit / Delete buttons */
+.task-card-actions {
+  /* 
+    TRY: flex row, right-aligned so buttons don't crowd the title.
+    Example: display: flex; justify-content: flex-end; gap: 0.4rem;
+    They can be hidden by default and shown on hover for a cleaner look.
+  */
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+/* Edit button */
+.task-card-actions button:first-child {
+  /* 
+    TRY: a neutral style — Trello uses grey tones for secondary actions.
+    Example:
+      background-color: #f0f0f0;
+      color: #333;
+      border: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+  */
+  background-color: #f0f0f0;
+  color: #333;
+  border: none;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.task-card-actions button:first-child:hover {
+  /* TRY: slightly darker on hover. Example: background-color: #ddd; */
+  background-color: #ddd;
+}
+
+/* Delete button */
+.task-card-actions button:last-child {
+  /* 
+    TRY: a red-tinted style to signal danger/destructive action.
+    Example:
+      background-color: #ffebe6;
+      color: #eb5a46;
+      border: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+  */
+  background-color: #ffebe6;
+  color: #eb5a46;
+  border: none;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.task-card-actions button:last-child:hover {
+  /* TRY: brighter red on hover. Example: background-color: #ffd5cc; */
+  background-color: #ffd5cc;
+}
+
+/* ===========================================
+   FORMS  (TaskForm / WorkspaceForm)
+   =========================================== */
+.task-form,
+.workspace-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.task-form input, .workspace-form input {
+.task-form input,
+.workspace-form input {
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-.task-form button, .workspace-form button {
+.task-form button,
+.workspace-form button {
   padding: 0.5rem;
   background-color: #0079bf;
   color: white;
@@ -224,34 +454,39 @@ body {
   cursor: pointer;
 }
 
-.task-form button:hover, .workspace-form button:hover {
+.task-form button:hover,
+.workspace-form button:hover {
   background-color: #005a87;
 }
 
-/* Loading Spinner Styles */
+/* ===========================================
+   LOADING SPINNER
+   =========================================== */
 .loading-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: calc(100vh - 60px);
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 60px);
+  gap: 1rem;
 }
 
 .loading-spinner {
-    width: 48px;
-    height: 48px;
-    border: 5px solid #e0e0e0;
-    border-top-color: #0079bf;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+  width: 48px;
+  height: 48px;
+  border: 5px solid #e0e0e0;
+  border-top-color: #0079bf;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-container p {
-    color: #666;
-    font-size: 1rem;
+  color: #666;
+  font-size: 1rem;
 }

@@ -53,7 +53,7 @@ const Board = () => {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="board">
-        <h1>{currentWorkspace.name} Board</h1>
+        <h1>{currentWorkspace.name}</h1>
         <div className="columns">
           {Object.entries(columns).map(([status, statusTasks]) => (
             <Column key={status} title={status} tasks={statusTasks} onDrop={onTaskDrop}/>
