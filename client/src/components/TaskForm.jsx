@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import useTasks from '../hooks/useTasks.js';
 
-const TaskForm = ({ onClose, task }) => {
+const TaskForm = ({ onClose, task, status = 'active' }) => {
   const { createTask, updateTask, currentWorkspace } = useTasks();
   const [title, setTitle] = useState(task?.title || '');
   const [dueDate, setDueDate] = useState(task?.due_date || '');
@@ -18,7 +18,7 @@ const TaskForm = ({ onClose, task }) => {
           title, 
           due_date: dueDate,
           workspace_id: currentWorkspace?.id,
-          status: 'active',
+          status,
         });
       } 
       onClose();

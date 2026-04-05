@@ -255,8 +255,11 @@ body {
   height: fit-content;
 }
 
-/* Column heading — "To Do", "In-Progress", "Completed" */
-.column h2 {
+/* ===========================================
+   COLUMN HEADER
+   The column title ("To Do", "In-Progress", "Completed").
+   =========================================== */
+.column-header {
   /* 
     TRY: slightly smaller than your board title.
     Trello uses ~14px semi-bold.
@@ -277,6 +280,55 @@ body {
   */
   font-size: 0.85rem;
   color: #888;
+}
+
+/* ===========================================
+   COLUMN ACTION (Add Task Button)
+   The <div className="column-action"> at the bottom of each column.
+   =========================================== */
+.column-action {
+  /* 
+    TRY: padding-top to separate from the last card.
+    Example: padding-top: 0.5rem;
+  */
+  padding-top: 0.5rem;
+}
+
+.column-action button {
+  /* 
+    TRY: Trello-style add button — subtle, grey background, full width.
+    Example:
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.04);
+      color: #5e6c84;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+  */
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.04);
+  color: #5e6c84;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.15s;
+}
+
+.column-action button:hover {
+  /* TRY: slightly darker on hover. Example: background-color: rgba(0, 0, 0, 0.08); */
+  background-color: rgba(0, 0, 0, 0.08);
 }
 
 /* ===========================================

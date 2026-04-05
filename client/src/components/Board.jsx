@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import Spinner from './Spinner';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import TaskForm from './TaskForm';
 
 const statusFromColumn = {
   'To Do': 'active',
@@ -15,6 +16,9 @@ const statusFromColumn = {
 const Board = () => {
   const { id } = useParams(); // Workspace id
   const { tasks, loading, loadingWorkspaces, workspaces, currentWorkspace, setCurrentWorkspace, fetchWorkspaces, updateTask } = useTasks();
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState('');
+  const [taskStatus, setTaskStatus] = useState('active');
 
   useEffect(() => {
     fetchWorkspaces();
@@ -35,6 +39,18 @@ const Board = () => {
     if (!newStatus || item.status === newStatus) return;
     await updateTask(item.id, { ...item, status: newStatus });
   }
+
+  const openModal = (type, status = 'active') => {
+    setModalType(type);
+    setTaskStatus(status);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setModalType('');
+    setTaskStatus('active');
+    setShowModal(false);
+  };
   
   if (loadingWorkspaces) return <Spinner message="Loading workspaces..." />;
   if (!workspaces.length) {
@@ -56,10 +72,18 @@ const Board = () => {
         <h1>{currentWorkspace.name}</h1>
         <div className="columns">
           {Object.entries(columns).map(([status, statusTasks]) => (
-            <Column key={status} title={status} tasks={statusTasks} onDrop={onTaskDrop}/>
+            <Column key={status} title={status} tasks={statusTasks} onDrop={onTaskDrop} onAddTask={() => openModal('task', statusFromColumn[status])}/>
           ))}
         </div>
       </div>
+      {showModal && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className='modal-close' onClick={closeModal}>×</button>
+            {modalType === 'task' && <TaskForm onClose={closeModal} status={taskStatus} />}
+          </div>
+        </div>
+      )}
     </DndProvider>
   );
 };

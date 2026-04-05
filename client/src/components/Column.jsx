@@ -3,10 +3,10 @@ import TaskCard from "./TaskCard";
 import DropZone from '../../helpers/DropZone';
 import DragItem from '../../helpers/DragItem';
 
-const Column = ({ title, tasks = [], onDrop } ) => {
+const Column = ({ title, tasks = [], onDrop, onAddTask } ) => {
   return (
     <div className="column">
-        <h2>{title}</h2>
+        <div className="column-header">{title}</div>
         {tasks.length === 0 && <p>No tasks yet...</p>}
 
         <DropZone onDrop={(item) => onDrop?.(item, title)}>
@@ -16,6 +16,9 @@ const Column = ({ title, tasks = [], onDrop } ) => {
                 <TaskCard task={task}/>
               </DragItem>
             ))}
+          </div>
+          <div className='column-action'>
+            <button onClick={onAddTask}>+ Add Task</button>
           </div>
         </DropZone>
     </div>
