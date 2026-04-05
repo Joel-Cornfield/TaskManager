@@ -19,7 +19,7 @@ export const createTask = async (req, res, next) => {
             res.status(400);
             throw new Error('Title is required');
         }
-        const newTask = await pool.query('INSERT INTO tasks (user_id, title, due_date, workspace_id, status) VALUES ($1, $2, $3, $4, $5) RETURNING *', [req.user.id, title, due_date, workspace_id, status || 'active']);
+        const newTask = await pool.query('INSERT INTO tasks (user_id, title, due_date, workspace_id, status) VALUES ($1, $2, $3, $4, $5) RETURNING *', [req.user.id, title, due_date || null, workspace_id, status || 'active']);
         res.status(201).json(newTask.rows[0]);
     } catch (error) {
         next(error); 

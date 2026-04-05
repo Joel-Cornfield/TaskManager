@@ -34,7 +34,7 @@ const TaskCard = ({ task }) => {
     return (
         <div className="task-card">
             <h3>{task.title}</h3>
-            <p>{formatDate(task.due_date)}</p>
+            {task.due_date && <p>{formatDate(task.due_date)}</p>}
             <div className="task-card-actions">
                 <button onClick={() => setIsEditing(true)}>Edit</button>
                 <button onClick={handleDelete}>Delete</button>
