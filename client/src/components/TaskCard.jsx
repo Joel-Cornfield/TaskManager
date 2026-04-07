@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import useTasks from '../hooks/useTasks.js';
 import TaskForm from './TaskForm';
+import ReactDOM from "react-dom";
 
 const TaskCard = ({ task }) => {
     const { deleteTask } = useTasks();
@@ -21,13 +22,14 @@ const TaskCard = ({ task }) => {
     };
 
     if (isEditing) {
-        return (
+        return ReactDOM.createPortal(
             <div className="modal-overlay" onClick={() => setIsEditing(false)}>
                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                     <button className="modal-close" onClick={() => setIsEditing(false)}>×</button>
                     <TaskForm task={task} onClose={() => setIsEditing(false)} />
                 </div>
-            </div>
+            </div>,
+            document.body
         );
     }
 

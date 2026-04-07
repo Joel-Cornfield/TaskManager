@@ -43,6 +43,7 @@ const Navbar = () => {
         <>
             <nav className="navbar">
                 <div className="navbar-left" ref={navLeftRef}>
+                    <img src="../logo.svg" className='navbar-logo' alt='logo'></img>
                     <Link to="/" className="navbar-title">Task Manager</Link>
                     {token && 
                         <div className="navbar-center">
