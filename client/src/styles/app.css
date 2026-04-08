@@ -103,8 +103,16 @@ body {
   transition: all .2s ease;
 }
 
+.create-btn {
+  background: #004687;
+}
+
+.create-btn:hover {
+  background: #005A9C;
+  transform: translateY(-1px);
+}
+
 .workspace-btn:hover,
-.create-btn:hover,
 .login-btn:hover,
 .logout-btn:hover {
 
