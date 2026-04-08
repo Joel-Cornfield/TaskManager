@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useTasks from '../hooks/useTasks';
+import Spinner from '../components/Spinner';
 
 const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const { register } = useTasks();
+    const { register, loadingAuth } = useTasks();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -17,6 +18,12 @@ const Register = () => {
         } catch (error) {
             setError(error?.response?.data?.message || 'Register failed');        }
     };
+
+    if (loadingAuth) return (
+        <div className='board'>
+            <Spinner message="Registering user..."/>
+        </div>
+    )
 
     return (
         <form onSubmit={handleSubmit} className="register-form">

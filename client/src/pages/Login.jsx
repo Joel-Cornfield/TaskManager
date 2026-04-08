@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useTasks from '../hooks/useTasks';
+import Spinner from '../components/Spinner';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const { login } = useTasks();
+    const { login, loadingAuth } = useTasks();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -17,6 +18,12 @@ const Login = () => {
         } catch (error) {
             setError(error?.response?.data?.message || 'Login failed');        }
     };
+
+    if (loadingAuth) return (
+        <div className='board'>
+            <Spinner message="Logging in user..."/>
+        </div>
+    )
 
     return (
         <form onSubmit={handleSubmit} className="login-form">

@@ -24,17 +24,31 @@ const useTasks = () => {
     // infinite loops when these functions are used in useEffect dependency arrays.
 
     const login = useCallback(async (email, password) => {
-        const { token, user } = await apiLogin(email, password);
-        dispatch({ type: 'SET_TOKEN', payload: token });
-        dispatch({ type: 'SET_USER', payload: user });
-        return { token, user };
+        dispatch({ type: 'SET_LOADING_AUTH', payload: true });
+        try {
+            const { token, user } = await apiLogin(email, password);
+            dispatch({ type: 'SET_TOKEN', payload: token });
+            dispatch({ type: 'SET_USER', payload: user });
+            return { token, user };
+        } catch (error) {
+            console.error('Error logging in user', error);
+        } finally {
+            dispatch({ type: 'SET_LOADING_AUTH', payload: false });
+        }
     }, [dispatch]);
 
     const register = useCallback(async (email, password) => {
         // No state update needed here
-        const data = await apiRegister(email, password);
-        return data;
-    }, []);
+        dispatch({ type: 'SET_LOADING_AUTH', payload: true });
+        try {
+            const data = await apiRegister(email, password);
+            return data;
+        } catch (error) {
+            console.error('Error registering user', error)
+        } finally {
+            dispatch({ type: 'SET_LOADING_AUTH', payload: false });
+        }
+    }, [dispatch]);
 
     const fetchTasks = useCallback(async (workspaceId) => {
         if (!workspaceId) return;
@@ -134,6 +148,7 @@ const useTasks = () => {
         token: state.token,
         loading: state.loading,
         loadingWorkspaces: state.loadingWorkspaces,
+        loadingAuth: state.loadingAuth,
         login,
         register,
         fetchTasks,

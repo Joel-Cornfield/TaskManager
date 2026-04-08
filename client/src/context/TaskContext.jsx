@@ -11,6 +11,7 @@ const initialState = {
     token: localStorage.getItem('token') || null,
     loading: false,
     loadingWorkspaces: false,
+    loadingAuth: false,
 };
 
 const taskReducer = (state, action) => {
@@ -61,6 +62,8 @@ const taskReducer = (state, action) => {
             return { ...state, loading: action.payload };
         case 'SET_LOADING_WORKSPACES': 
             return { ...state, loadingWorkspaces: action.payload };
+        case 'SET_LOADING_AUTH':
+            return { ...state, loadingAuth: action.payload };
         default:
             return state;
     }
