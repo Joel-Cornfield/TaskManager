@@ -511,11 +511,18 @@ body {
 /* ===========================================
    FORMS
    =========================================== */
-
-.task-form h2 {
+.task-form h2,
+.workspace-form h2 {
 
   font-size: 1.15rem;
 
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
   margin-bottom: 1rem;
 }
 
