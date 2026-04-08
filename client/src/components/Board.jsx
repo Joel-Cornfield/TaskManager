@@ -52,13 +52,27 @@ const Board = () => {
     setShowModal(false);
   };
   
-  if (loadingWorkspaces) return <Spinner message="Loading workspaces..." />;
+  if (loadingWorkspaces) return (
+      <div className="board">
+        <Spinner message="Loading workspaces..." />
+      </div>
+  ); 
+
   if (!workspaces.length) {
     return <div className="board">You have not created a workspace yet...</div>;
-  }
+  };
 
-  if (!currentWorkspace) return <Spinner message="Loading workspaces..." />;
-  if (loading) return <Spinner message="Loading tasks..." />;
+  if (!currentWorkspace) return (
+      <div className="board">
+        <Spinner message="Loading workspaces..." />
+      </div>
+  );
+  
+  if (loading) return (
+      <div className='board'>
+        <Spinner message="Loading tasks..." />;
+      </div>
+  );
 
   const columns = {
     'To Do': tasks.filter(t => t.status === 'active'),
