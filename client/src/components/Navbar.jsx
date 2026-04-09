@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTasks } from '../context/TaskContext';
-import TaskForm from './TaskForm';
-import WorkspaceForm from './WorkspaceForm';
 
 const Navbar = () => {
     const { state, dispatch } = useTasks();
     const { workspaces, token } = state;
     const [showWorkspaceDropdown, setShowWorkspaceDropdown] = useState(false);
-    const [showModal, setShowModal] = useState(false);
-    const [modalType, setModalType] = useState('');
     const [showCreateMenu, setShowCreateMenu] = useState(false);
     const navLeftRef = useRef(null);
 
@@ -25,18 +21,24 @@ const Navbar = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    const navigate = useNavigate();
+
     const handleLogout = () => {
         dispatch({ type: 'LOGOUT' });
     };
 
-    const openModal = (type) => {
-        setModalType(type);
-        setShowModal(true);
+    const handleCreateTask = () => {
+        if (state.currentWorkspace?.id) {
+            navigate(`/workspace/${state.currentWorkspace.id}`);
+        } else {
+            navigate('/workspaces');
+        }
+        setShowCreateMenu(false);
     };
 
-    const closeModal = () => {
-        setModalType('');
-        setShowModal(false);
+    const handleCreateWorkspace = () => {
+        navigate('/workspaces');
+        setShowCreateMenu(false);
     };
 
     return (
@@ -87,8 +89,8 @@ const Navbar = () => {
                                 </button>
                                 {showCreateMenu && (
                                     <div className="create-menu">
-                                        <button onClick={() => { openModal('task'); setShowCreateMenu(false); }}>New Task</button>
-                                        <button onClick={() => { openModal('workspace'); setShowCreateMenu(false); }}>New Workspace</button>
+                                        <button onClick={handleCreateTask}>New Task</button>
+                                        <button onClick={handleCreateWorkspace}>New Workspace</button>
                                     </div>
                                 )}
                             </div>
@@ -103,15 +105,6 @@ const Navbar = () => {
                     )}
                 </div>
             </nav>
-            {showModal && (
-                <div className="modal-overlay" onClick={closeModal}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <button className='modal-close' onClick={closeModal}>×</button>
-                        {modalType === 'task' && <TaskForm onClose={closeModal} />}
-                        {modalType === 'workspace' && <WorkspaceForm onClose={closeModal} />}
-                    </div>
-                </div>
-            )}
         </>
     );
 };
