@@ -220,6 +220,8 @@ body {
   overflow-x: auto;
 
   padding-bottom: 1rem;
+
+  align-items: flex-start;
 }
 
 .columns::-webkit-scrollbar {
