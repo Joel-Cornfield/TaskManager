@@ -26,16 +26,24 @@ const Register = () => {
     )
 
     return (
-        <form onSubmit={handleSubmit} className="register-form">
-            <h2>Register</h2>
-            {error && <p className="error">{error}</p>}
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required/>
-            <input type="text" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required/>
-            <button type="submit">Register</button>
-            <p>
-                    Already have an account? <Link to="/login">Click here</Link>
-            </p>
-        </form>
+        <div className="auth-page">
+            <div className="auth-card">
+            <h2>Create account</h2>
+            {error && <p className="auth-error">{error}</p>}
+            <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label>Email</label>
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required />
+                </div>
+                <div className="form-group">
+                    <label>Password</label>
+                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required />
+                </div>
+                <button type="submit" className="auth-submit">Create account</button>
+            </form>
+            <p className="auth-link">Already have an account? <Link to="/login">Sign in</Link></p>
+            </div>
+        </div>
     );
 };
 

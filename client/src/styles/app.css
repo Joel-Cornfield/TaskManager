@@ -831,3 +831,89 @@ input:focus {
 .workspace-card-actions button:last-child:hover {
   background: #fecaca;
 }
+
+/* ===========================================
+   AUTH PAGES (Login + Register)
+   =========================================== */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-gradient);
+  padding: 2rem;
+}
+
+.auth-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2.2rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: var(--shadow-hover);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.auth-card h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  letter-spacing: .2px;
+}
+
+.auth-card .form-group {
+  margin-bottom: 1rem;
+}
+
+.auth-submit {
+  width: 100%;
+  padding: .65rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: .9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .18s ease;
+  margin-top: .5rem;
+  letter-spacing: .2px;
+}
+
+.auth-submit:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37,99,235,0.35);
+}
+
+.auth-error {
+  background: rgba(239, 68, 68, 0.08);
+  color: var(--danger);
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.auth-link {
+  font-size: .82rem;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 1.25rem;
+}
+
+.auth-link a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-link a:hover {
+  text-decoration: underline;
+}

@@ -8,6 +8,7 @@ const Navbar = () => {
     const [showWorkspaceDropdown, setShowWorkspaceDropdown] = useState(false);
     const [showCreateMenu, setShowCreateMenu] = useState(false);
     const navLeftRef = useRef(null);
+    const currentPath = window.location.pathname;
 
     // Close dropdown on outside click
     useEffect(() => {
@@ -100,8 +101,10 @@ const Navbar = () => {
                 <div className="navbar-right">
                     {token ? (
                         <button className='logout-btn' onClick={handleLogout}>Logout</button>
-                    ) : (
+                    ) : currentPath === '/register' ? (
                         <Link to="/login" className="login-btn">Login</Link>
+                    ) : (
+                        <Link to="/register" className="login-btn">Register</Link>
                     )}
                 </div>
             </nav>
