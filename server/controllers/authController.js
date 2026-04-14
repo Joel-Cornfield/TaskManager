@@ -9,10 +9,10 @@ const createToken = (user) =>
 
 export const register = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-        if (!email || !password) {
+        const { email, password, name } = req.body;
+        if (!email || !password || !name) {
             res.status(400);
-            throw new Error('Email and password required');
+            throw new Error('Email, password, and name required');
         }
         // Check user exists
         const userExists = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
@@ -26,7 +26,7 @@ export const register = async (req, res, next) => {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         // Insert user 
-        const newUser = await pool.query('INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email', [email, hashedPassword]);
+        const newUser = await pool.query('INSERT INTO users (email, password, name) VALUES ($1, $2, $3) RETURNING id, email', [email, hashedPassword, name]);
 
         res.status(201).json(newUser.rows[0]);
     } catch (error) {
@@ -54,7 +54,7 @@ export const login = async (req, res, next) => {
         if (!isMatch) return res.status(400).json({ message: 'Invalid email or password' });
         
         const token = createToken(user);
-        res.json({ token, user: { id: user.id, email: user.email }});
+        res.json({ token, user: { id: user.id, email: user.email, name: user.name }});
     } catch (error) {
         next(error);
     }
@@ -62,7 +62,7 @@ export const login = async (req, res, next) => {
 
 export const getUser = async (req, res, next) => {
     try {
-        const user = await pool.query('SELECT id, email FROM users WHERE id = $1', [req.user.id]);
+        const user = await pool.query('SELECT id, email, name FROM users WHERE id = $1', [req.user.id]);
         if (!user.rows.length) return res.status(404).json({ message: 'User not found' });
         res.json({ user: user.rows[0] });
     } catch (error) {
