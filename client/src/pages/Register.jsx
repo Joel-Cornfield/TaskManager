@@ -6,6 +6,7 @@ import Spinner from '../components/Spinner';
 const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
     const [error, setError] = useState('');
     const { register, loadingAuth } = useTasks();
     const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await register(email, password);
+            await register(email, password, name);
             navigate('/login');
         } catch (error) {
             setError(error?.response?.data?.message || 'Register failed');        }
@@ -38,6 +39,10 @@ const Register = () => {
                 <div className="form-group">
                     <label>Password</label>
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required />
+                </div>
+                <div className="form-group">
+                    <label>Name</label>
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="John" required/>
                 </div>
                 <button type="submit" className="auth-submit">Create account</button>
             </form>

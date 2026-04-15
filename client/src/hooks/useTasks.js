@@ -37,11 +37,11 @@ const useTasks = () => {
         }
     }, [dispatch]);
 
-    const register = useCallback(async (email, password) => {
+    const register = useCallback(async (email, password, name) => {
         // No state update needed here
         dispatch({ type: 'SET_LOADING_AUTH', payload: true });
         try {
-            const data = await apiRegister(email, password);
+            const data = await apiRegister(email, password, name);
             return data;
         } catch (error) {
             console.error('Error registering user', error)
