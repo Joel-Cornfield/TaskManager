@@ -4,7 +4,7 @@ import { useTasks } from '../context/TaskContext';
 
 const Navbar = () => {
     const { state, dispatch } = useTasks();
-    const { workspaces, token } = state;
+    const { workspaces, memberWorkspaces, token } = state;
     const [showWorkspaceDropdown, setShowWorkspaceDropdown] = useState(false);
     const navLeftRef = useRef(null);
     const currentPath = window.location.pathname;
@@ -46,8 +46,17 @@ const Navbar = () => {
                                     <div className="workspace-dropdown">
                                         <Link to="/workspaces" onClick={() => setShowWorkspaceDropdown(false)}>View all workspaces</Link>
                                         <hr />
-                                        {workspaces?.map(workspace => (
+                                        {workspaces?.slice(0,2).map(workspace => (
                                             <Link
+                                                key={workspace.id}
+                                                to={`/workspace/${workspace.id}`}
+                                                onClick={() => setShowWorkspaceDropdown(false)}
+                                            >
+                                                {workspace.name}
+                                            </Link>
+                                        ))}
+                                        {memberWorkspaces?.slice(0,2).map(workspace => (
+                                            <Link 
                                                 key={workspace.id}
                                                 to={`/workspace/${workspace.id}`}
                                                 onClick={() => setShowWorkspaceDropdown(false)}
