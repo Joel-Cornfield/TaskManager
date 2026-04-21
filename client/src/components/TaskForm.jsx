@@ -1,22 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useTasks from '../hooks/useTasks.js';
 
 const TaskForm = ({ onClose, task, status = 'active' }) => {
-  const { createTask, updateTask, currentWorkspace } = useTasks();
+  const { createTask, updateTask, currentWorkspace, fetchWorkspaceMembers } = useTasks();
   const [title, setTitle] = useState(task?.title || '');
   const [dueDate, setDueDate] = useState(task?.due_date || '');
+  const [assigneeIds, setAssigneeIds] = useState(task?.assignee_ids || []);
+  const [workspaceMembers, setWorkspaceMembers] = useState([]);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (currentWorkspace?.id) {
+      loadWorkspaceMembers();
+    }
+  }, [currentWorkspace?.id]);
+
+  const loadWorkspaceMembers = async () => {
+    try {
+      const members = await fetchWorkspaceMembers(currentWorkspace.id);
+      setWorkspaceMembers(members);
+    } catch (error) {
+      console.error('Error loading workspace members:', error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;
     try {
+      const taskData = { 
+        title, 
+        due_date: dueDate === "" ? null : dueDate,
+        assignee_ids: assigneeIds,
+      };
+      
       if (task) {
-        await updateTask(task.id, { title, due_date: dueDate });
+        await updateTask(task.id, taskData);
       } else {
         await createTask({ 
-          title, 
-          due_date: dueDate,
+          ...taskData,
           workspace_id: currentWorkspace?.id,
           status,
         });
@@ -26,6 +48,15 @@ const TaskForm = ({ onClose, task, status = 'active' }) => {
       setError(error?.response?.data?.message || 'Task operation failed'); 
     }
   }
+
+  const handleAssigneeChange = (memberId) => {
+    setAssigneeIds(prev => 
+      prev.includes(memberId) 
+        ? prev.filter(id => id !== memberId)
+        : [...prev, memberId]
+    );
+  };
+
   return (
     <div className="task-form">
       <h2>{task ? 'Update Task' : 'Create Task'}</h2>
@@ -39,8 +70,8 @@ const TaskForm = ({ onClose, task, status = 'active' }) => {
             value={title} 
             onChange={(e) => setTitle(e.target.value)} 
             placeholder="Task title" 
-            required>
-          </input>
+            required
+          />
         </div>
         <div className="form-group">
           <label htmlFor="dueDate">Due Date</label>
@@ -50,6 +81,21 @@ const TaskForm = ({ onClose, task, status = 'active' }) => {
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
           />
+        </div>
+        <div className="form-group">
+          <label>Assignees</label>
+          <div className="assignees-list">
+            {workspaceMembers.map(member => (
+              <label key={member.id} className="assignee-checkbox">
+                <input
+                  type="checkbox"
+                  checked={assigneeIds.includes(member.id)}
+                  onChange={() => handleAssigneeChange(member.id)}
+                />
+                {member.name || member.email}
+              </label>
+            ))}
+          </div>
         </div>
         <div className="form-actions">
             <button type="button" onClick={onClose}>Cancel</button>

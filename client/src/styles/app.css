@@ -677,6 +677,180 @@ input:focus {
 }
 
 /* ===========================================
+   WORKSPACE FORM MEMBERS
+   =========================================== */
+
+.members-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.add-member-btn {
+  background: var(--success);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.add-member-btn:hover {
+  background: #16a34a;
+}
+
+.add-member-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
+.add-member-form input {
+  flex: 1;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+}
+
+.add-member-form button {
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.add-member-form button[type="submit"] {
+  background: var(--primary);
+  color: white;
+}
+
+.add-member-form button[type="submit"]:hover {
+  background: var(--primary-dark);
+}
+
+.add-member-form button[type="button"] {
+  background: #f3f4f6;
+  color: var(--muted);
+}
+
+.add-member-form button[type="button"]:hover {
+  background: #e5e7eb;
+}
+
+.members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.member-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: #f8fafc;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.remove-member-btn {
+  background: var(--danger);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.remove-member-btn:hover {
+  background: #dc2626;
+}
+
+/* ===========================================
+   WORKSPACE FORM LAYOUT (NEW)
+   =========================================== */
+
+.workspace-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Add a divider between form + members */
+.member-manager {
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 0.9rem;
+  border: 1px solid var(--border);
+}
+
+/* Optional: slightly distinguish the section */
+.member-manager h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+  letter-spacing: .3px;
+}
+
+/* ===========================================
+   TASK FORM ASSIGNEES
+   =========================================== */
+
+.assignees-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.assignee-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  font-size: 0.85rem;
+}
+
+.assignee-checkbox input[type="checkbox"] {
+  margin: 0;
+}
+
+/* ===========================================
+   TASK CARD ASSIGNEES
+   =========================================== */
+
+.task-assignees {
+  margin: 0.5rem 0;
+}
+
+.task-assignees small {
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ===========================================
    SPINNER
    =========================================== */
 

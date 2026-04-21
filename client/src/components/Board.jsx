@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useTasks from '../hooks/useTasks'; // ← change to this
 import Column from './Column';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Spinner from './Spinner';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -19,6 +19,7 @@ const Board = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('');
   const [taskStatus, setTaskStatus] = useState('active');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchWorkspaces();
@@ -59,7 +60,7 @@ const Board = () => {
   ); 
 
   if (!workspaces.length) {
-    return <div className="board">You have not created a workspace yet...</div>;
+    navigate('/workspaces');
   };
 
   if (!currentWorkspace) return (

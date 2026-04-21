@@ -86,7 +86,7 @@ export const updateWorkspace = async (req, res, next) => {
         }
         const result = await pool.query('UPDATE workspaces SET name = $1 WHERE id = $2 AND user_id = $3 RETURNING *',[name, id, req.user.id]);
 
-        if (!resukt.rows.length) {
+        if (!result.rows.length) {
             return res.status(404).json({ message: "Workspace not found" });
         }
         res.json(result.rows[0]);

@@ -37,6 +37,11 @@ const TaskCard = ({ task }) => {
         <div className="task-card">
             <h3>{task.title}</h3>
             {task.due_date && <p>{formatDate(task.due_date)}</p>}
+            {task.assignee_names && task.assignee_names.length > 0 && (
+                <div className="task-assignees">
+                    <small>Assigned to: {task.assignee_names.join(', ')}</small>
+                </div>
+            )}
             <div className="task-card-actions">
                 <button onClick={() => setIsEditing(true)}>Edit</button>
                 <button onClick={handleDelete}>Delete</button>

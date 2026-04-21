@@ -12,6 +12,9 @@ import {
     updateWorkspace as apiUpdateWorkspace,
     deleteWorkspace as apiDeleteWorkspace,
     getUser,
+    getWorkspaceMembers,
+    addWorkspaceMember as apiAddWorkspaceMember,
+    removeWorkspaceMember as apiRemoveWorkspaceMember,
 } from '../api/tasksApi.js';
 
 // Custom hook that wraps the raw context and API calls into clean, reusable functions.
@@ -131,6 +134,35 @@ const useTasks = () => {
         }
     }, [dispatch]);
 
+    const fetchWorkspaceMembers = useCallback(async (workspaceId) => {
+        try {
+            const response = await getWorkspaceMembers(workspaceId);
+            return response;
+        } catch (error) {
+            console.error('Error fetching workspace members', error);
+            return [];
+        }
+    }, []);
+
+    const addWorkspaceMember = useCallback(async (workspaceId, email) => {
+        try {
+            const response = await apiAddWorkspaceMember(workspaceId, email);
+            return response;
+        } catch (error) {
+            console.error('Error adding workspace member', error);
+            throw error;
+        }
+    }, []);
+
+    const removeWorkspaceMember = useCallback(async (workspaceId, memberId) => {
+        try {
+            await apiRemoveWorkspaceMember(workspaceId, memberId);
+        } catch (error) {
+            console.error('Error removing workspace member', error);
+            throw error;
+        }
+    }, []);
+
     // Sets the active workspace in state and immediately fetches its tasks.
     const setCurrentWorkspace = useCallback((workspace) => {
         dispatch({ type: 'SET_CURRENT_WORKSPACE', payload: workspace });
@@ -159,6 +191,9 @@ const useTasks = () => {
         createWorkspace,
         updateWorkspace, 
         deleteWorkspace,
+        fetchWorkspaceMembers,
+        addWorkspaceMember,
+        removeWorkspaceMember,
         setCurrentWorkspace,
         dispatch,
     };
