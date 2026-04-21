@@ -5,7 +5,10 @@ import useTasks from '../hooks/useTasks';
 
 const WorkspaceItem = ({ workspace }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const { deleteWorkspace } = useTasks();
+  const { deleteWorkspace, workspaces } = useTasks();
+
+  // Check if this is an owned workspace
+  const isOwned = workspaces.some(w => w.id === workspace.id);
 
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this workspace?')) {
@@ -27,10 +30,12 @@ const WorkspaceItem = ({ workspace }) => {
         <div className="workspace-item">
             <h3>{workspace.name}</h3>
             <Link to={`/workspace/${workspace.id}`}>Open</Link>
-            <div className="workspace-card-actions">
-                <button onClick={() => setIsEditing(true)}>Edit</button> 
-                <button onClick={handleDelete}>Delete</button>
-            </div>
+            {isOwned && (
+                <div className="workspace-card-actions">
+                    <button onClick={() => setIsEditing(true)}>Edit</button> 
+                    <button onClick={handleDelete}>Delete</button>
+                </div>
+            )}
         </div>
     );
 };
