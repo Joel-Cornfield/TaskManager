@@ -37,6 +37,12 @@ const Board = () => {
       }
   }, [id, workspaces, currentWorkspace?.id]); // Add currentWorkspace?.id to dependencies
 
+  useEffect(() => {
+    if (!loadingWorkspaces && !workspaces.length) {
+      navigate('/workspaces');
+    }
+  }, [loadingWorkspaces, workspaces.length, navigate]);
+
   const onTaskDrop = async (item, columnTitle) => {
     const newStatus = statusFromColumn[columnTitle];
     if (!newStatus || item.status === newStatus) return;
@@ -60,12 +66,6 @@ const Board = () => {
         <Spinner message="Loading workspaces..." />
       </div>
   ); 
-
-  useEffect(() => {
-    if (!loadingWorkspaces && !workspaces.length) {
-      navigate('/workspaces');
-    }
-  }, [loadingWorkspaces, workspaces.length, navigate]);
 
   if (!currentWorkspace) return (
       <div className="board">
