@@ -15,7 +15,7 @@ const statusFromColumn = {
 
 const Board = () => {
   const { id } = useParams(); // Workspace id
-  const { tasks, loading, loadingWorkspaces, workspaces, currentWorkspace, setCurrentWorkspace, fetchWorkspaces, updateTask } = useTasks();
+  const { tasks, loading, loadingWorkspaces, workspaces, memberWorkspaces, currentWorkspace, setCurrentWorkspace, fetchWorkspaces, updateTask } = useTasks();
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('');
   const [taskStatus, setTaskStatus] = useState('active');
@@ -26,22 +26,24 @@ const Board = () => {
   }, [fetchWorkspaces]); // fetch on mount
 
   useEffect(() => {
-      if (!workspaces.length) return;
+      const allWorkspaces = [...workspaces, ...memberWorkspaces];
+      if (!allWorkspaces.length) return;
       if (id) {
-          const workspace = workspaces.find(w => w.id === parseInt(id));
+          const workspace = allWorkspaces.find(w => w.id === parseInt(id));
           if (workspace && workspace.id !== currentWorkspace?.id) {
               setCurrentWorkspace(workspace);
           }
-      } else if (!currentWorkspace && workspaces.length > 0) {
-          setCurrentWorkspace(workspaces[0]);
+      } else if (!currentWorkspace && allWorkspaces.length > 0) {
+          setCurrentWorkspace(allWorkspaces[0]);
       }
-  }, [id, workspaces, currentWorkspace?.id]); // Add currentWorkspace?.id to dependencies
+  }, [id, workspaces, memberWorkspaces, currentWorkspace?.id]);
 
   useEffect(() => {
-    if (!loadingWorkspaces && !workspaces.length) {
+    const allWorkspaces = [...workspaces, ...memberWorkspaces];
+    if (!loadingWorkspaces && !allWorkspaces.length) {
       navigate('/workspaces');
     }
-  }, [loadingWorkspaces, workspaces.length, navigate]);
+  }, [loadingWorkspaces, workspaces, memberWorkspaces, navigate]);
 
   const onTaskDrop = async (item, columnTitle) => {
     const newStatus = statusFromColumn[columnTitle];
