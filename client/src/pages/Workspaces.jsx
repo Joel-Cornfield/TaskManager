@@ -4,7 +4,7 @@ import WorkspaceList from '../components/WorkspaceList';
 import WorkspaceForm from '../components/WorkspaceForm';
 
 const Workspaces = () => {
-  const { workspaces, fetchWorkspaces } = useTasks();
+  const { workspaces, memberWorkspaces, fetchWorkspaces } = useTasks();
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const Workspaces = () => {
         </button>
       </div>
 
-      <WorkspaceList workspaces={workspaces} />
+      <WorkspaceList workspaces={workspaces} memberWorkspaces={memberWorkspaces} />
       
       {showCreateModal && (
         <div className='modal-overlay' onClick={() => setShowCreateModal(false)}>

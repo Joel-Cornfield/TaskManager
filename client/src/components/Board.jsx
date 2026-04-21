@@ -29,11 +29,13 @@ const Board = () => {
       if (!workspaces.length) return;
       if (id) {
           const workspace = workspaces.find(w => w.id === parseInt(id));
-          if (workspace) setCurrentWorkspace(workspace);
-      } else if (!currentWorkspace) {
+          if (workspace && workspace.id !== currentWorkspace?.id) {
+              setCurrentWorkspace(workspace);
+          }
+      } else if (!currentWorkspace && workspaces.length > 0) {
           setCurrentWorkspace(workspaces[0]);
       }
-  }, [id, workspaces]); // intentionally omit currentWorkspace and setCurrentWorkspace
+  }, [id, workspaces, currentWorkspace?.id]); // Add currentWorkspace?.id to dependencies
 
   const onTaskDrop = async (item, columnTitle) => {
     const newStatus = statusFromColumn[columnTitle];
@@ -59,9 +61,11 @@ const Board = () => {
       </div>
   ); 
 
-  if (!workspaces.length) {
-    navigate('/workspaces');
-  };
+  useEffect(() => {
+    if (!loadingWorkspaces && !workspaces.length) {
+      navigate('/workspaces');
+    }
+  }, [loadingWorkspaces, workspaces.length, navigate]);
 
   if (!currentWorkspace) return (
       <div className="board">

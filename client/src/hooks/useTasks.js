@@ -175,6 +175,7 @@ const useTasks = () => {
     return {
         tasks: state.tasks || [],
         workspaces: state.workspaces || [],
+        memberWorkspaces: state.memberWorkspaces || [],
         currentWorkspace: state.currentWorkspace || null,
         user: state.user,
         token: state.token,

@@ -6,6 +6,7 @@ const TaskContext = createContext();
 const initialState = {
     tasks: [],
     workspaces: [],
+    memberWorkspaces: [],
     currentWorkspace: null,
     user: null,
     token: localStorage.getItem('token') || null,
@@ -33,20 +34,30 @@ const taskReducer = (state, action) => {
                 tasks: state.tasks.filter(task => task.id !== action.payload),
             };
         case 'SET_WORKSPACES':
-            return { ...state, workspaces: action.payload };
+            return { 
+                ...state, 
+                workspaces: action.payload.owned || [],
+                memberWorkspaces: action.payload.member || []
+            };
         case 'ADD_WORKSPACE':
-            return { ...state, workspaces: [...state.workspaces, action.payload] };
+            return { 
+                ...state, 
+                workspaces: [...state.workspaces, action.payload],
+                memberWorkspaces: state.memberWorkspaces || []
+            };
         case 'UPDATE_WORKSPACE':
             return { 
                 ...state,
                 workspaces: state.workspaces.map(workspace => 
                     workspace.id === action.payload.id ? action.payload : workspace
                 ),
+                memberWorkspaces: state.memberWorkspaces || []
             };
         case 'DELETE_WORKSPACE': 
             return { 
                 ...state, 
                 workspaces: state.workspaces.filter(workspace => workspace.id !== action.payload),
+                memberWorkspaces: state.memberWorkspaces || []
             };
         case 'SET_CURRENT_WORKSPACE':
             return { ...state, currentWorkspace: action.payload };

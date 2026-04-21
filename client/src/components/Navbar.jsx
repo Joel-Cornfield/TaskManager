@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTasks } from '../context/TaskContext';
 
 const Navbar = () => {
     const { state, dispatch } = useTasks();
     const { workspaces, token } = state;
     const [showWorkspaceDropdown, setShowWorkspaceDropdown] = useState(false);
-    const [showCreateMenu, setShowCreateMenu] = useState(false);
     const navLeftRef = useRef(null);
     const currentPath = window.location.pathname;
 
@@ -15,31 +14,14 @@ const Navbar = () => {
         const handleClickOutside = (event) => {
             if (navLeftRef.current && !navLeftRef.current.contains(event.target)) {
                 setShowWorkspaceDropdown(false);
-                setShowCreateMenu(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const navigate = useNavigate();
-
     const handleLogout = () => {
         dispatch({ type: 'LOGOUT' });
-    };
-
-    const handleCreateTask = () => {
-        if (state.currentWorkspace?.id) {
-            navigate(`/workspace/${state.currentWorkspace.id}`);
-        } else {
-            navigate('/workspaces');
-        }
-        setShowCreateMenu(false);
-    };
-
-    const handleCreateWorkspace = () => {
-        navigate('/workspaces');
-        setShowCreateMenu(false);
     };
 
     return (
@@ -50,12 +32,11 @@ const Navbar = () => {
                     <Link to="/" className="navbar-title">Task Manager</Link>
                     {token && 
                         <div className="navbar-center">
-                            <div className="workspace-section">
+                            <div className="workspace-nav">
                                 <button
                                     className="workspace-btn"
                                     onClick={() => {
                                         setShowWorkspaceDropdown(!showWorkspaceDropdown);
-                                        setShowCreateMenu(false);
                                     }}
                                 >
                                     Workspaces
@@ -74,24 +55,6 @@ const Navbar = () => {
                                                 {workspace.name}
                                             </Link>
                                         ))}
-                                    </div>
-                                )}
-                            </div>
-                            <div className="create-section">
-                                <button
-                                    className='create-btn'
-                                    onClick={() => {
-                                        setShowCreateMenu(!showCreateMenu);
-                                        setShowWorkspaceDropdown(false);
-                                    }}
-                                >
-                                    + Create
-                                    <span className={`dropdown-arrow ${showCreateMenu ? 'open' : ''}`}>▼</span>
-                                </button>
-                                {showCreateMenu && (
-                                    <div className="create-menu">
-                                        <button onClick={handleCreateTask}>New Task</button>
-                                        <button onClick={handleCreateWorkspace}>New Workspace</button>
                                     </div>
                                 )}
                             </div>

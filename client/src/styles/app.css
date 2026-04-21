@@ -77,8 +77,8 @@ body {
   gap: 0.5rem;
 }
 
-.workspace-section,
-.create-section {
+.workspace-nav,
+.create-nav {
   position: relative;
 }
 
@@ -922,6 +922,40 @@ input:focus {
   gap: 1rem;
 }
 
+.workspace-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.workspace-section {
+  background: rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 1.2rem;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.workspace-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.workspace-section-header h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: .3px;
+}
+
+.empty-state {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.85rem;
+  padding: 0.5rem 0.2rem;
+}
+
 /* ===========================================
    WORKSPACE ITEM CARD
    =========================================== */
@@ -962,6 +996,13 @@ input:focus {
 .workspace-item a:hover {
   text-decoration: underline;
 }
+
+.empty-state {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.85rem;
+  padding: 0.5rem 0.2rem;
+}
+
 /* ===========================================
    WORKSPACE CARD ACTIONS
    =========================================== */

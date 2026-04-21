@@ -26,16 +26,32 @@ const isWorkspaceMember = async (workspaceId, userId) => {
 
 export const getWorkspaces = async (req, res, next) => {
     try {
-        const workspaces = await pool.query(
-            `SELECT w.*
+        // Get owned workspaces
+        const ownedWorkspaces = await pool.query(
+            `SELECT w.*, 'owner' as user_role
             FROM workspaces w
             JOIN workspace_members m
                 ON w.id = m.workspace_id
-            WHERE m.user_id = $1
+            WHERE m.user_id = $1 AND m.role = 'owner'
             ORDER BY w.created_at DESC`,
             [req.user.id]
-        );   
-        res.json(workspaces.rows);
+        );
+
+        // Get member workspaces (not owned)
+        const memberWorkspaces = await pool.query(
+            `SELECT w.*, 'member' as user_role
+            FROM workspaces w
+            JOIN workspace_members m
+                ON w.id = m.workspace_id
+            WHERE m.user_id = $1 AND m.role != 'owner'
+            ORDER BY w.created_at DESC`,
+            [req.user.id]
+        );
+
+        res.json({
+            owned: ownedWorkspaces.rows,
+            member: memberWorkspaces.rows
+        });
     } catch (error) {
         next(error);
     }
