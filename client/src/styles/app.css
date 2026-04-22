@@ -462,40 +462,6 @@ body {
   margin-top: 0.75rem;
 }
 
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.55);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  backdrop-filter: blur(6px);
-  z-index: 1000;
-}
-
-.modal-content {
-  background: white;
-  padding: 1.8rem;
-  border-radius: 16px;
-  width: min(92%, 420px);
-  box-shadow: var(--shadow-hover);
-  position: relative;
-}
-
-.modal-close {
-  position: absolute;
-  right: 12px;
-  top: 8px;
-  font-size: 1.4rem;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: var(--muted);
-}
-
-.modal-close:hover {
-  color: black;
-}
 
 .column-action button:hover {
 
@@ -785,7 +751,7 @@ input:focus {
 }
 
 /* ===========================================
-   WORKSPACE FORM LAYOUT (NEW)
+   WORKSPACE FORM LAYOUT 
    =========================================== */
 
 .workspace-form {
@@ -802,9 +768,10 @@ input:focus {
   border-radius: 10px;
   padding: 0.9rem;
   border: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
 }
 
-/* Optional: slightly distinguish the section */
 .member-manager h3 {
   font-size: 0.9rem;
   font-weight: 700;
@@ -932,7 +899,6 @@ input:focus {
   background: rgba(255,255,255,0.08);
   border-radius: 16px;
   padding: 1.2rem;
-  backdrop-filter: blur(6px);
   border: 1px solid rgba(255,255,255,0.12);
 }
 
