@@ -1,15 +1,15 @@
-import pool from "../config/db";
+import pool from "../config/db.js";
 
 export const imageUpload = async (req, res, next) => {
     try {
-        const imagePath = `/uploads/${req.file.fileName}`
+        const imagePath = `/uploads/${req.file.filename}`
 
         await pool.query(
             'UPDATE users SET profile_image = $1 WHERE id = $2',
             [imagePath, req.user.id]
         );
 
-        res.json({ profile_image, imagePath });
+        res.json({ profile_image: imagePath });
     } catch (error) {
         next(error)
     }

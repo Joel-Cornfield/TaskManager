@@ -1,6 +1,7 @@
 import express from 'express';
-import upload from '../middleware/upload';
-import { imageUpload } from '../controllers/profileController';
+import upload from '../middleware/upload.js';
+import { imageUpload } from '../controllers/profileController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const profileRoutes = express.Router();
 

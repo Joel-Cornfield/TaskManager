@@ -72,7 +72,22 @@ const Navbar = () => {
                 </div>
                 <div className="navbar-right">
                     {token ? (
-                        <button className='logout-btn' onClick={handleLogout}>Logout</button>
+                        <div className="navbar-user-section">
+                            <Link to="/profile" className="profile-link">
+                                {state.user?.profile_image ? (
+                                    <img
+                                        src={`http://localhost:4000${state.user.profile_image}`}
+                                        alt="Profile"
+                                        className="navbar-profile-image"
+                                    />
+                                ) : (
+                                    <div className="navbar-profile-placeholder">
+                                        {state.user?.name ? state.user.name.charAt(0).toUpperCase() : state.user?.email.charAt(0).toUpperCase()}
+                                    </div>
+                                )}
+                            </Link>
+                            <button className='logout-btn' onClick={handleLogout}>Logout</button>
+                        </div>
                     ) : currentPath === '/register' ? (
                         <Link to="/login" className="login-btn">Login</Link>
                     ) : (

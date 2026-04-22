@@ -15,6 +15,7 @@ import {
     getWorkspaceMembers,
     addWorkspaceMember as apiAddWorkspaceMember,
     removeWorkspaceMember as apiRemoveWorkspaceMember,
+    uploadProfileImage as apiUploadProfileImage,
 } from '../api/tasksApi.js';
 
 // Custom hook that wraps the raw context and API calls into clean, reusable functions.
@@ -162,6 +163,16 @@ const useTasks = () => {
             throw error;
         }
     }, []);
+
+    const uploadProfileImage = useCallback(async (formData) => {
+        try {
+            await apiUploadProfileImage(formData);
+            return response;
+        } catch (error) {
+            console.error('Error uploading profile image', error);
+            throw error;
+        }
+    }) 
 
     // Sets the active workspace in state and immediately fetches its tasks.
     const setCurrentWorkspace = useCallback((workspace) => {

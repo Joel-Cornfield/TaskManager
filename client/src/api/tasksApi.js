@@ -88,3 +88,10 @@ export const addWorkspaceMember = async (workspaceId, email) => {
 export const removeWorkspaceMember = async (workspaceId, memberId) => {
     await axios.delete(`${API_URL}/workspaces/${workspaceId}/members/${memberId}`, getAuthHeader());
 };
+
+// Upload profile image 
+export const uploadProfileImage = async (formData) => {
+    await axios.post(`${API_URL}/profile/profile-image`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    });
+};

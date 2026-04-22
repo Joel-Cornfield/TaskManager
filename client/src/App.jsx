@@ -6,8 +6,8 @@ import { TaskProvider } from './context/TaskContext';
 import './styles/app.css';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import useTasks from './hooks/useTasks';
 import Workspaces from './pages/Workspaces';
+import Profile from './pages/Profile';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
@@ -24,6 +24,7 @@ const App = () => {
           <Route path="/" element={<ProtectedRoute><Board /></ProtectedRoute>} />
           <Route path="/workspaces" element={<ProtectedRoute><Workspaces /></ProtectedRoute>} />
           <Route path="/workspace/:id" element={<ProtectedRoute><Board /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         </Routes>
       </Router>
     </TaskProvider>
