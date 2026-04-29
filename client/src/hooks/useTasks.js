@@ -166,13 +166,13 @@ const useTasks = () => {
 
     const uploadProfileImage = useCallback(async (formData) => {
         try {
-            await apiUploadProfileImage(formData);
+            const response = await apiUploadProfileImage(formData);
             return response;
         } catch (error) {
             console.error('Error uploading profile image', error);
             throw error;
         }
-    }) 
+    }, []);
 
     // Sets the active workspace in state and immediately fetches its tasks.
     const setCurrentWorkspace = useCallback((workspace) => {
@@ -207,6 +207,7 @@ const useTasks = () => {
         addWorkspaceMember,
         removeWorkspaceMember,
         setCurrentWorkspace,
+        uploadProfileImage,
         dispatch,
     };
 };

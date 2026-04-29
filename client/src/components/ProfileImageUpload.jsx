@@ -49,7 +49,10 @@ const ProfileImageUpload = () => {
             setFile(null);
             alert('Profile image uploaded successfully!');
         } catch (error) {
-            setError(error?.response?.data?.message || 'Upload failed');
+            console.error('Profile upload error:', error);
+            setError(
+                error?.response?.data?.message || error?.message || 'Upload failed'
+            );
         } finally {
             setUploading(false);
         }

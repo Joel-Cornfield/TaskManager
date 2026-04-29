@@ -91,7 +91,10 @@ export const removeWorkspaceMember = async (workspaceId, memberId) => {
 
 // Upload profile image 
 export const uploadProfileImage = async (formData) => {
-    await axios.post(`${API_URL}/profile/profile-image`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    const response = await axios.post(
+        `${API_URL}/profile/profile-image`,
+        formData,
+        getAuthHeader()
+    );
+    return response.data;
 };
