@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import useTasks from '../hooks/useTasks';
 import MemberManager from './MemberManager';
 
-const WorkspaceForm = ({ onClose, workspace }) => {
+const WorkspaceForm = ({ onClose, workspace, members }) => {
   const [name, setName] = useState(workspace?.name || '');
   const [error, setError] = useState('');
 
@@ -53,7 +53,7 @@ const WorkspaceForm = ({ onClose, workspace }) => {
 
       {/* Member management */}
       {workspace && (
-        <MemberManager workspaceId={workspace.id} />
+        <MemberManager workspaceId={workspace.id} workspaceMembers={members} />
       )}
     </div>
   );

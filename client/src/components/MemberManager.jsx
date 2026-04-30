@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import useTasks from '../hooks/useTasks';
 
-const MemberManager = ({ workspaceId }) => {
-  const [members, setMembers] = useState([]);
+const MemberManager = ({ workspaceId, workspaceMembers }) => {
+  const [members, setMembers] = useState(workspaceMembers || []);
   const [newMemberEmail, setNewMemberEmail] = useState('');
   const [error, setError] = useState('');
   const [showAddMember, setShowAddMember] = useState(false);
@@ -12,10 +12,6 @@ const MemberManager = ({ workspaceId }) => {
     addWorkspaceMember,
     removeWorkspaceMember
   } = useTasks();
-
-  useEffect(() => {
-    loadMembers();
-  }, [workspaceId]);
 
   const loadMembers = async () => {
     try {
