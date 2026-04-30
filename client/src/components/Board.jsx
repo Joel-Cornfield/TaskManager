@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import useTasks from '../hooks/useTasks'; // ← change to this
+import useTasks from '../hooks/useTasks';
 import Column from './Column';
 import { useNavigate, useParams } from 'react-router-dom';
 import Spinner from './Spinner';

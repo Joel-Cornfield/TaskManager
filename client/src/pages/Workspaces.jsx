@@ -2,14 +2,19 @@ import React, { useEffect, useState } from 'react'
 import useTasks from '../hooks/useTasks'
 import WorkspaceList from '../components/WorkspaceList';
 import WorkspaceForm from '../components/WorkspaceForm';
+import Spinner from '../components/Spinner';
 
 const Workspaces = () => {
-  const { workspaces, memberWorkspaces, fetchWorkspaces } = useTasks();
+  const { workspaces, memberWorkspaces, fetchWorkspaces, loadingWorkspaces } = useTasks();
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     fetchWorkspaces();
   }, [fetchWorkspaces]);
+
+  if (loadingWorkspaces) {
+    return <Spinner message="Loading workspaces..." />;
+  }
 
   return (
     <div className='workspaces'>
