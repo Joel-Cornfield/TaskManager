@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import useTasks from '../hooks/useTasks';
+import Spinner from './Spinner';
 
 const ProfileImageUpload = () => {
     const [file, setFile] = useState(null);
-    const [uploading, setUploading] = useState(false);
     const [error, setError] = useState('');
-    const { uploadProfileImage, user, dispatch } = useTasks();
+    const { uploadProfileImage, dispatch, loadingProfileImage } = useTasks();
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -28,24 +28,13 @@ const ProfileImageUpload = () => {
     const handleUpload = async () => {
         if (!file) return;
 
-        setUploading(true);
         setError('');
 
         try {
             const formData = new FormData();
             formData.append('image', file);
 
-            const response = await uploadProfileImage(formData);
-
-            // Update user state with new profile image
-            dispatch({
-                type: 'SET_USER',
-                payload: {
-                    ...user,
-                    profile_image: response.profile_image
-                }
-            });
-
+            await uploadProfileImage(formData);
             setFile(null);
             alert('Profile image uploaded successfully!');
         } catch (error) {
@@ -53,8 +42,6 @@ const ProfileImageUpload = () => {
             setError(
                 error?.response?.data?.message || error?.message || 'Upload failed'
             );
-        } finally {
-            setUploading(false);
         }
     };
 
@@ -64,7 +51,7 @@ const ProfileImageUpload = () => {
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                disabled={uploading}
+                disabled={loadingProfileImage}
             />
             {file && (
                 <div className="file-preview">
@@ -77,10 +64,11 @@ const ProfileImageUpload = () => {
             )}
             <button
                 onClick={handleUpload}
-                disabled={!file || uploading}
+                disabled={!file || loadingProfileImage}
             >
-                {uploading ? 'Uploading...' : 'Upload'}
+                {loadingProfileImage ? 'Uploading...' : 'Upload'}
             </button>
+            {loadingProfileImage && <Spinner message="Uploading profile image..." />}
             {error && <p className="error">{error}</p>}
         </div>
     );

@@ -1,11 +1,16 @@
 import React from 'react';
 import useTasks from '../hooks/useTasks';
 import ProfileImageUpload from '../components/ProfileImageUpload';
+import Spinner from '../components/Spinner';
 
 const Profile = () => {
-    const { user } = useTasks();
+    const { user, token, loadingUser } = useTasks();
 
-    if (!user) {
+    if (loadingUser) {
+        return <Spinner message="Loading profile..." />;
+    }
+
+    if (!token || !user) {
         return <div>Please log in to view your profile</div>;
     }
 

@@ -10,7 +10,8 @@ const MemberManager = ({ workspaceId, workspaceMembers }) => {
   const {
     fetchWorkspaceMembers,
     addWorkspaceMember,
-    removeWorkspaceMember
+    removeWorkspaceMember,
+    loadingWorkspaceMembers
   } = useTasks();
 
   const loadMembers = async () => {
@@ -83,23 +84,32 @@ const MemberManager = ({ workspaceId, workspaceMembers }) => {
       )}
 
       <div className="members-list">
-        {members.map(member => (
-          <div key={member.id} className="member-item">
-            <span>
-              {member.name || member.email} ({member.role})
-            </span>
-
-            {member.role !== 'owner' && (
-              <button
-                type="button"
-                onClick={() => handleRemoveMember(member.id)}
-                className="remove-member-btn"
-              >
-                ×
-              </button>
-            )}
+        {loadingWorkspaceMembers ? (
+          <div className="members-loading">
+            <p>Loading members...</p>
           </div>
-        ))}
+        ) : members.length === 0 ? (
+          <p className="empty-state">No members yet.</p>
+        ) : (
+          members.map(member => (
+            <div key={member.id} className="member-item">
+              <span>
+                {member.name || member.email} ({member.role})
+              </span>
+
+              {member.role !== 'owner' && (
+                <button
+                  type="button"
+                  onClick={() => handleRemoveMember(member.id)}
+                  className="remove-member-btn"
+                  disabled={loadingWorkspaceMembers}
+                >
+                  ×
+                </button>
+              )}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

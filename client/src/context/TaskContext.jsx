@@ -12,6 +12,9 @@ const initialState = {
     token: localStorage.getItem('token') || null,
     loading: false,
     loadingWorkspaces: false,
+    loadingProfileImage: false,
+    loadingWorkspaceMembers: false,
+    loadingUser: false,
     loadingAuth: false,
 };
 
@@ -73,6 +76,12 @@ const taskReducer = (state, action) => {
             return { ...state, loading: action.payload };
         case 'SET_LOADING_WORKSPACES': 
             return { ...state, loadingWorkspaces: action.payload };
+        case 'SET_LOADING_PROFILE_IMAGE':
+            return { ...state, loadingProfileImage: action.payload };
+        case 'SET_LOADING_WORKSPACE_MEMBERS':
+            return { ...state, loadingWorkspaceMembers: action.payload };
+        case 'SET_LOADING_USER':
+            return { ...state, loadingUser: action.payload };
         case 'SET_LOADING_AUTH':
             return { ...state, loadingAuth: action.payload };
         default:
@@ -86,11 +95,14 @@ export const TaskProvider = ({ children }) => {
     useEffect(() => {
         const restoreSession = async () => {
             if (!state.token) return;
+            dispatch({ type: 'SET_LOADING_USER', payload: true });
             try {
                 const response = await getUser();
                 dispatch({ type: 'SET_USER', payload: response.user });
             } catch (error) {
                 dispatch({ type: 'LOGOUT' });
+            } finally {
+                dispatch({ type: 'SET_LOADING_USER', payload: false });
             }
         };
         restoreSession();

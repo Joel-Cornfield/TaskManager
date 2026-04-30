@@ -4,7 +4,7 @@ import { useTasks } from '../context/TaskContext';
 
 const Navbar = () => {
     const { state, dispatch } = useTasks();
-    const { workspaces, memberWorkspaces, token } = state;
+    const { workspaces, memberWorkspaces, token, loadingUser, user } = state;
     const [showWorkspaceDropdown, setShowWorkspaceDropdown] = useState(false);
     const navLeftRef = useRef(null);
     const currentPath = window.location.pathname;
@@ -74,15 +74,19 @@ const Navbar = () => {
                     {token ? (
                         <div className="navbar-user-section">
                             <Link to="/profile" className="profile-link">
-                                {state.user?.profile_image ? (
+                                {loadingUser ? (
+                                    <div className="navbar-profile-placeholder">
+                                        ...
+                                    </div>
+                                ) : user?.profile_image ? (
                                     <img
-                                        src={`http://localhost:4000${state.user.profile_image}`}
+                                        src={`http://localhost:4000${user.profile_image}`}
                                         alt="Profile"
                                         className="navbar-profile-image"
                                     />
                                 ) : (
                                     <div className="navbar-profile-placeholder">
-                                        {state.user?.name ? state.user.name.charAt(0).toUpperCase() : state.user?.email.charAt(0).toUpperCase()}
+                                        {user?.name ? user.name.charAt(0).toUpperCase() : user?.email?.charAt(0).toUpperCase()}
                                     </div>
                                 )}
                             </Link>

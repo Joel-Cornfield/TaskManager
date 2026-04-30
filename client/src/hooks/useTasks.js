@@ -136,43 +136,57 @@ const useTasks = () => {
     }, [dispatch]);
 
     const fetchWorkspaceMembers = useCallback(async (workspaceId) => {
+        dispatch({ type: 'SET_LOADING_WORKSPACE_MEMBERS', payload: true });
         try {
             const response = await getWorkspaceMembers(workspaceId);
             return response;
         } catch (error) {
             console.error('Error fetching workspace members', error);
             return [];
+        } finally {
+            dispatch({ type: 'SET_LOADING_WORKSPACE_MEMBERS', payload: false });
         }
-    }, []);
+    }, [dispatch]);
 
     const addWorkspaceMember = useCallback(async (workspaceId, email) => {
+        dispatch({ type: 'SET_LOADING_WORKSPACE_MEMBERS', payload: true });
         try {
             const response = await apiAddWorkspaceMember(workspaceId, email);
             return response;
         } catch (error) {
             console.error('Error adding workspace member', error);
             throw error;
+        } finally {
+            dispatch({ type: 'SET_LOADING_WORKSPACE_MEMBERS', payload: false });
         }
-    }, []);
+    }, [dispatch]);
 
     const removeWorkspaceMember = useCallback(async (workspaceId, memberId) => {
+        dispatch({ type: 'SET_LOADING_WORKSPACE_MEMBERS', payload: true });
         try {
             await apiRemoveWorkspaceMember(workspaceId, memberId);
         } catch (error) {
             console.error('Error removing workspace member', error);
             throw error;
+        } finally {
+            dispatch({ type: 'SET_LOADING_WORKSPACE_MEMBERS', payload: false });
         }
-    }, []);
+    }, [dispatch]);
 
     const uploadProfileImage = useCallback(async (formData) => {
+        dispatch({ type: 'SET_LOADING_PROFILE_IMAGE', payload: true });
         try {
             const response = await apiUploadProfileImage(formData);
+            const userResponse = await getUser();
+            dispatch({ type: 'SET_USER', payload: userResponse.user });
             return response;
         } catch (error) {
             console.error('Error uploading profile image', error);
             throw error;
+        } finally {
+            dispatch({ type: 'SET_LOADING_PROFILE_IMAGE', payload: false });
         }
-    }, []);
+    }, [dispatch]);
 
     // Sets the active workspace in state and immediately fetches its tasks.
     const setCurrentWorkspace = useCallback((workspace) => {
@@ -192,6 +206,9 @@ const useTasks = () => {
         token: state.token,
         loading: state.loading,
         loadingWorkspaces: state.loadingWorkspaces,
+        loadingProfileImage: state.loadingProfileImage,
+        loadingWorkspaceMembers: state.loadingWorkspaceMembers,
+        loadingUser: state.loadingUser,
         loadingAuth: state.loadingAuth,
         login,
         register,

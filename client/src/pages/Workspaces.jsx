@@ -13,7 +13,11 @@ const Workspaces = () => {
   }, [fetchWorkspaces]);
 
   if (loadingWorkspaces) {
-    return <Spinner message="Loading workspaces..." />;
+    return (
+      <div className='workspaces'>
+        <Spinner message="Loading workspaces..." />
+      </div>
+    );
   }
 
   return (
