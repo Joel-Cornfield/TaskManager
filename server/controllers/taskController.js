@@ -31,6 +31,7 @@ export const getTasks = async (req, res, next) => {
                             jsonb_build_object(
                                 'id', u.id,
                                 'name', u.name,
+                                'email', u.email,
                                 'profile_image', u.profile_pic
                             )
                         ) FILTER (WHERE u.id IS NOT NULL),
