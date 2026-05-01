@@ -32,7 +32,7 @@ export const getTasks = async (req, res, next) => {
                                 'id', u.id,
                                 'name', u.name,
                                 'email', u.email,
-                                'profile_image', u.profile_pic
+                                'profile_image', u.profile_image
                             )
                         ) FILTER (WHERE u.id IS NOT NULL),
                          '[]'
