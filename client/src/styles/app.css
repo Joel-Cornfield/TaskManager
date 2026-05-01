@@ -1016,7 +1016,8 @@ input:focus {
   padding: 0.5rem 0.2rem;
 }
 
-.members-preview {
+.members-preview, 
+.task-assignees {
   display: flex;
   flex-direction: row;
   gap: 0.3rem;
