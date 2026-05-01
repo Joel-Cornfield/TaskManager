@@ -5,7 +5,9 @@ const TaskForm = ({ onClose, task, status = 'active' }) => {
   const { createTask, updateTask, currentWorkspace, fetchWorkspaceMembers } = useTasks();
   const [title, setTitle] = useState(task?.title || '');
   const [dueDate, setDueDate] = useState(task?.due_date || '');
-  const [assigneeIds, setAssigneeIds] = useState(task?.assignee_ids || []);
+  const [assigneeIds, setAssigneeIds] = useState(
+    task?.assignee_ids || task?.assignees?.map((assignee) => assignee.id) || []
+  );
   const [workspaceMembers, setWorkspaceMembers] = useState([]);
   const [error, setError] = useState('');
 
@@ -14,6 +16,12 @@ const TaskForm = ({ onClose, task, status = 'active' }) => {
       loadWorkspaceMembers();
     }
   }, [currentWorkspace?.id]);
+
+  useEffect(() => {
+    if (task?.assignees) {
+      setAssigneeIds(task.assignees.map((assignee) => assignee.id));
+    }
+  }, [task?.assignees]);
 
   const loadWorkspaceMembers = async () => {
     try {

@@ -37,9 +37,22 @@ const TaskCard = ({ task }) => {
         <div className="task-card">
             <h3>{task.title}</h3>
             {task.due_date && <p>{formatDate(task.due_date)}</p>}
-            {task.assignee_names && task.assignee_names.length > 0 && (
+            {task.assignees && task.assignees.length > 0 && (
                 <div className="task-assignees">
-                    <small>Assigned to: {task.assignee_names.join(', ')}</small>
+                    {task.assignees.map(assignee => (
+                        assignee.profile_image ? (
+                            <img
+                              key={assignee.id}
+                              src={`http://localhost:4000${assignee.profile_image}`}
+                              alt="Assignee"
+                              className="navbar-profile-image"  
+                            />
+                        ) : (
+                            <div key={assignee.id} className="navbar-profile-placeholder">
+                                {assignee.name ? assignee.name.charAt(0).toUpperCase() :  assignee.email.charAt(0).toUpperCase()}
+                            </div>
+                        )
+                    ))}
                 </div>
             )}
             <div className="task-card-actions">
