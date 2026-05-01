@@ -26,8 +26,16 @@ export const getTasks = async (req, res, next) => {
         
         const tasks = await pool.query(
             `SELECT t.*, 
-                    array_agg(ta.user_id) FILTER (WHERE ta.user_id IS NOT NULL) as assignee_ids,
-                    array_agg(u.name) FILTER (WHERE u.name IS NOT NULL) as assignee_names
+                    COALESCE(
+                        jsonb_agg(
+                            jsonb_build_object(
+                                'id', u.id,
+                                'name', u.name,
+                                'profile_image', u.profile_pic
+                            )
+                        ) FILTER (WHERE u.id IS NOT NULL),
+                         '[]'
+                    ) AS assignees
              FROM tasks t
              LEFT JOIN task_assignees ta ON t.id = ta.task_id
              LEFT JOIN users u ON ta.user_id = u.id
