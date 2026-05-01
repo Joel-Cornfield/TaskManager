@@ -151,7 +151,30 @@ export const updateTask = async (req, res, next) => {
         }
         
         await client.query('COMMIT');
-        res.json(result.rows[0]);
+
+        // Re-fetch with assignees so the response matches getTasks shape
+        const fullTask = await client.query(
+            `SELECT t.*, 
+                COALESCE(
+                    jsonb_agg(
+                        jsonb_build_object(
+                            'id', u.id,
+                            'name', u.name,
+                            'email', u.email,
+                            'profile_image', u.profile_image
+                        )
+                    ) FILTER (WHERE u.id IS NOT NULL),
+                    '[]'
+                ) AS assignees
+            FROM tasks t
+            LEFT JOIN task_assignees ta ON t.id = ta.task_id
+            LEFT JOIN users u ON ta.user_id = u.id
+            WHERE t.id = $1
+            GROUP BY t.id`,
+            [id]
+        );
+
+        res.json(fullTask.rows[0]);
     } catch (err) {
         await client.query('ROLLBACK');
         next(err);
