@@ -134,7 +134,7 @@ export const getWorkspaceMembers = async (req, res, next) => {
         }
 
         const members = await pool.query(
-            `SELECT u.id, u.email, u.name, m.role, m.joined_at
+            `SELECT u.id, u.email, u.name, u.profile_image, m.role, m.joined_at
             FROM workspace_members m 
             JOIN users u
                 ON u.id = m.user_id
