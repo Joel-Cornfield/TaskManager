@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useTasks from '../hooks/useTasks';
 import Column from './Column';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Spinner from './Spinner';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -15,10 +15,12 @@ const statusFromColumn = {
 
 const Board = () => {
   const { id } = useParams(); // Workspace id
-  const { tasks, loading, loadingWorkspaces, workspaces, memberWorkspaces, currentWorkspace, setCurrentWorkspace, fetchWorkspaces, updateTask } = useTasks();
+  const location = useLocation();
+  const { tasks, loading, loadingWorkspaces, workspaces, memberWorkspaces, currentWorkspace, setCurrentWorkspace, fetchWorkspaces, updateTask, fetchWorkspaceMembers } = useTasks();
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('');
   const [taskStatus, setTaskStatus] = useState('active');
+  const [members, setMembers] = useState(location.state?.members || []); // Members passed through state 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,6 +46,22 @@ const Board = () => {
       navigate('/workspaces');
     }
   }, [loadingWorkspaces, workspaces, memberWorkspaces, navigate]);
+
+  // Fallback fetch 
+  useEffect(() => {
+    if (!location.state?.members) {
+      loadMembers();
+    }
+  }, []);
+
+  const loadMembers = async () => {
+    try {
+      const data = await fetchWorkspaceMembers(id);
+      setMembers(data);
+    } catch (error) {
+      console.log('Error loading members', error);
+    }
+  };
 
   const onTaskDrop = async (item, columnTitle) => {
     const newStatus = statusFromColumn[columnTitle];
